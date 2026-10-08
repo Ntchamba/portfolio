@@ -1,10 +1,6 @@
-import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
-import { HeroFallback } from "./Fallbacks.jsx";
-import SafeCanvas from "./SafeCanvas.jsx";
+import Pc3D from "./Pc3D.jsx";
 import { profile } from "../data/constants.js";
-
-const ComputersCanvas = lazy(() => import("./canvas/Computer.jsx"));
 
 export default function Hero() {
   return (
@@ -24,11 +20,9 @@ export default function Hero() {
         </div>
       </div>
 
-      <SafeCanvas className="hero__canvas" eager fallback={<HeroFallback />}>
-        <Suspense fallback={<div className="loader">Chargement…</div>}>
-          <ComputersCanvas />
-        </Suspense>
-      </SafeCanvas>
+      <div className="hero__canvas">
+        <Pc3D />
+      </div>
 
       <a href="#about" className="hero__scroll" aria-label="Défiler vers le bas">
         <span className="hero__mouse">

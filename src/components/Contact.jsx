@@ -1,9 +1,6 @@
-import { Suspense, lazy, useState } from "react";
-import { EarthFallback } from "./Fallbacks.jsx";
-import SafeCanvas from "./SafeCanvas.jsx";
+import { useState } from "react";
+import Planet3D from "./Planet3D.jsx";
 import { profile } from "../data/constants.js";
-
-const EarthCanvas = lazy(() => import("./canvas/Earth.jsx"));
 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -40,11 +37,9 @@ export default function Contact() {
           </label>
           <button type="submit">{sent ? "Ouvert dans ta messagerie ✓" : "Envoyer"}</button>
         </form>
-        <SafeCanvas className="contact__earth" fallback={<EarthFallback />}>
-          <Suspense fallback={null}>
-            <EarthCanvas />
-          </Suspense>
-        </SafeCanvas>
+        <div className="contact__earth">
+          <Planet3D />
+        </div>
       </div>
     </section>
   );

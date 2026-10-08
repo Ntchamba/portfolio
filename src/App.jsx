@@ -1,4 +1,3 @@
-import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar.jsx";
 import WaveBg from "./components/WaveBg.jsx";
 import Hero from "./components/Hero.jsx";
@@ -6,10 +5,8 @@ import About from "./components/About.jsx";
 import Experience from "./components/Experience.jsx";
 import Tech from "./components/Tech.jsx";
 import Projects from "./components/Projects.jsx";
-import SafeCanvas from "./components/SafeCanvas.jsx";
+import StarField from "./components/StarField.jsx";
 import Contact from "./components/Contact.jsx";
-
-const StarsCanvas = lazy(() => import("./components/canvas/Stars.jsx"));
 
 export default function App() {
   return (
@@ -25,11 +22,7 @@ export default function App() {
       <Projects />
       <div className="contact-wrap">
         <Contact />
-        <SafeCanvas className="stars-layer" fallback={<div className="fb-stars" />}>
-          <Suspense fallback={null}>
-            <StarsCanvas />
-          </Suspense>
-        </SafeCanvas>
+        <StarField />
       </div>
     </div>
   );

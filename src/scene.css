@@ -1,0 +1,107 @@
+/* ===== Scènes 3D en CSS pur (aucun WebGL requis) ===== */
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes hue { to { filter: hue-rotate(360deg); } }
+@keyframes sway { from { transform: rotateY(-7deg); } to { transform: rotateY(7deg); } }
+@keyframes bob { 50% { transform: translateY(-12px); } }
+
+/* ---------- Ordinateur ---------- */
+.hero__canvas { position: absolute; inset: 0; z-index: 1; }
+.pc-wrap { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-end; padding: 0 3% 40px 0; cursor: grab; touch-action: pan-y; user-select: none; }
+.pc-wrap.is-dragging { cursor: grabbing; }
+.pc { --k: 1; width: 900px; height: 560px; flex: none; transform: scale(var(--k)); transform-origin: 50% 100%; perspective: 2600px; perspective-origin: 50% 20%; }
+.pc-sway { position: absolute; inset: 0; transform-style: preserve-3d; animation: sway 9s ease-in-out infinite alternate; }
+.pc-wrap.is-dragging .pc-sway { animation-play-state: paused; }
+.pc-stage { --rx: -13deg; --ry: -14deg; --glare: 50%; position: absolute; left: 50%; top: 66%; width: 0; height: 0; transform-style: preserve-3d; transform: rotateX(var(--rx)) rotateY(var(--ry)); }
+.pc-stage::after { content: ""; position: absolute; left: -520px; top: 20px; width: 1040px; height: 560px; border-radius: 50%; background: radial-gradient(closest-side, rgba(145, 94, 255, .35), transparent); transform: rotateX(90deg) translateZ(-30px); pointer-events: none; }
+
+.box { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; }
+.face { position: absolute; backface-visibility: hidden; overflow: hidden; }
+.b-dark .face { background: linear-gradient(145deg, #23233a, #0d0d18); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); }
+.b-dark .face--right, .b-dark .face--left { filter: brightness(.8); }
+.b-dark .face--back { filter: brightness(.6); }
+.b-dark .face--bottom { background: #05050a; }
+.b-desk .face { background: #3d3d4d; }
+.b-desk .face--front { background: linear-gradient(#34343f, #23232c); }
+.b-desk .face--right, .b-desk .face--left { background: #2a2a34; }
+.desk-top { width: 100%; height: 100%; background:
+  radial-gradient(circle at 30% 40%, rgba(255,255,255,.07), transparent 55%),
+  repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 2px, transparent 2px 7px),
+  linear-gradient(135deg, #4a4a5a, #34343f); }
+
+/* écran */
+.b-monitor .face--front { background: #07070c; padding: 8px; overflow: visible; }
+.screen { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: 3px; box-shadow: 0 0 40px rgba(130, 110, 255, .35); }
+.screen img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+/* reflet qui se déplace quand on pivote la scène */
+.glass { position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(105deg, transparent calc(var(--glare) - 22%), rgba(255, 255, 255, .22) var(--glare), transparent calc(var(--glare) + 14%)),
+  linear-gradient(180deg, rgba(255,255,255,.07), transparent 40%); }
+
+/* enceintes */
+.spk { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; }
+.spk-ring { display: block; border-radius: 50%; border: 4px solid #ff3d8b; background: radial-gradient(circle, #05050a 45%, #1a1a2e 46%); box-shadow: 0 0 12px #ff3d8b, inset 0 0 8px #ff3d8b; animation: hue 7s linear infinite; filter: hue-rotate(var(--h)); }
+
+/* tour RGB */
+.tower-front, .tower-side { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 14px 0 22px; background: linear-gradient(160deg, #0b0818, #02020a); }
+.gpu { display: flex; gap: 10px; padding: 8px; border-radius: 6px; background: #12101f; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.tower-bar { position: absolute; left: 14px; right: 14px; bottom: 10px; height: 4px; border-radius: 4px; background: linear-gradient(90deg, #ff3d8b, #8b5cf6, #22d3ee); box-shadow: 0 0 10px #8b5cf6; animation: hue 6s linear infinite; }
+.fan { position: relative; display: block; border-radius: 50%; border: 5px solid #ff3d8b; background: #05050a; box-shadow: 0 0 14px #ff3d8b, inset 0 0 10px rgba(255, 61, 139, .6); animation: hue 6s linear infinite; filter: hue-rotate(var(--h)); }
+.fan i { position: absolute; inset: 4px; border-radius: 50%; background: conic-gradient(from 0deg, #1d1b33 0 10%, #3a3560 10% 14%, #1d1b33 14% 25%, #3a3560 25% 29%, #1d1b33 29% 40%, #3a3560 40% 44%, #1d1b33 44% 55%, #3a3560 55% 59%, #1d1b33 59% 70%, #3a3560 70% 74%, #1d1b33 74% 85%, #3a3560 85% 89%, #1d1b33 89%); animation: spin 1.6s linear infinite; }
+
+/* clavier RGB */
+.keys { width: 100%; height: 100%; background:
+  repeating-linear-gradient(90deg, #0a0a14 0 22px, transparent 22px 26px),
+  repeating-linear-gradient(0deg, #0a0a14 0 20px, transparent 20px 25px),
+  linear-gradient(90deg, #ff2d95, #8b5cf6, #22d3ee, #34d399, #facc15, #ff2d95);
+  background-size: 100% 100%, 100% 100%, 200% 100%; animation: keysflow 5s linear infinite; }
+@keyframes keysflow { to { background-position: 0 0, 0 0, 200% 0; } }
+
+/* tapis + souris */
+.b-pad .face { background: #2a1466; }
+.pad { width: 100%; height: 100%; background:
+  radial-gradient(circle at 50% 50%, rgba(167, 139, 250, .5) 0 2px, transparent 3px) 0 0 / 28px 24px,
+  linear-gradient(135deg, #5b21b6, #1e3a8a); box-shadow: inset 0 0 20px rgba(167, 139, 250, .5); }
+.b-mouse .face { background: linear-gradient(145deg, #ff4d6d, #b3123a); box-shadow: 0 0 14px rgba(255, 61, 107, .6); }
+
+/* ---------- Planète à rubans ---------- */
+.contact__earth { position: relative; flex: 1; min-height: 480px; display: grid; place-items: center; }
+.planet { --g: min(400px, 78vw); position: relative; width: var(--g); height: var(--g); }
+.planet__layer, .globe { position: absolute; inset: 0; }
+.globe { border-radius: 50%; background-size: 200% 100%; background-repeat: repeat-x; animation: roll 60s linear infinite;
+  box-shadow: inset -42px -26px 80px rgba(0, 0, 0, .88), inset 14px 10px 40px rgba(60, 100, 200, .25), 0 0 60px rgba(60, 100, 220, .35); }
+.globe::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 30% 28%, rgba(120, 160, 255, .22), transparent 55%); }
+@keyframes roll { to { background-position: calc(var(--g) * -2) 0; } }
+.rb { --size: calc(var(--g) * var(--s)); position: absolute; left: 50%; top: 50%; width: var(--size); height: var(--size); margin: calc(var(--size) / -2) 0 0 calc(var(--size) / -2);
+  transform: rotate(var(--roll)) perspective(1100px) rotateX(var(--tilt)); pointer-events: none; }
+.rb--back { clip-path: inset(0 0 50% 0); }
+.rb--front { clip-path: inset(50% 0 0 0); }
+.rb__arc { position: absolute; inset: 0; border-radius: 50%; animation: spin 18s linear infinite;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--size) * var(--t)), #000 calc(100% - var(--size) * var(--t) + 1px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--size) * var(--t)), #000 calc(100% - var(--size) * var(--t) + 1px));
+  filter: drop-shadow(0 0 6px rgba(160, 130, 255, .5)); }
+
+/* ---------- Boules de compétences ---------- */
+.balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px 24px; margin: 56px 0 28px; perspective: 800px; }
+.ball { width: 128px; height: 128px; animation: bob 4.5s ease-in-out infinite; animation-delay: var(--d); cursor: pointer; }
+.ball__body { position: relative; width: 100%; height: 100%; border-radius: 50%; display: grid; place-items: center; overflow: hidden;
+  background:
+    conic-gradient(from 20deg at 50% 50%, rgba(0,0,0,.18) 0 8%, transparent 8% 16%, rgba(0,0,0,.1) 16% 25%, transparent 25% 33%, rgba(0,0,0,.18) 33% 41%, transparent 41% 50%, rgba(0,0,0,.1) 50% 58%, transparent 58% 66%, rgba(0,0,0,.18) 66% 75%, transparent 75% 83%, rgba(0,0,0,.1) 83% 91%, transparent 91%),
+    radial-gradient(circle at 32% 28%, #fffdf7, #d9d2c5 55%, #8f887b);
+  box-shadow: inset -14px -16px 28px rgba(0,0,0,.4), 0 0 24px rgba(145, 94, 255, .25), 0 14px 24px rgba(0,0,0,.45); transform-style: preserve-3d; }
+.ball__label { max-width: 84%; text-align: center; white-space: pre-line; font-weight: 800; font-size: 17px; line-height: 1.15; color: #2a1f4d; }
+.ball:hover .ball__body { animation: ballturn 1.6s linear infinite; }
+.ball:hover .ball__label { animation: labelturn 1.6s linear infinite; }
+@keyframes ballturn { to { transform: rotateZ(360deg); } }
+@keyframes labelturn { to { transform: rotateZ(-360deg) rotateY(360deg); } }
+
+/* ---------- Étoiles ---------- */
+.stars-layer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+@media (max-width: 860px) {
+  .pc-wrap { padding: 0 0 30px; justify-content: center; }
+  .contact__earth { min-height: 380px; }
+  .planet { --g: min(300px, 74vw); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-sway, .ball, .globe, .rb__arc, .fan i, .keys { animation: none !important; }
+}

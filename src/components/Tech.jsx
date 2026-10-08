@@ -1,37 +1,18 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import Section from "./Section.jsx";
-import { BallsFallback } from "./Fallbacks.jsx";
-import SafeCanvas from "./SafeCanvas.jsx";
 import { technologies, skills } from "../data/constants.js";
 
-const BallsCanvas = lazy(() => import("./canvas/Balls.jsx"));
-const CELL = 150;
-
+// Boules « icosaèdre » en CSS : flottent en permanence et tournent sur elles-mêmes au survol.
 export default function Tech() {
-  const wrap = useRef(null);
-  const [height, setHeight] = useState(CELL);
-
-  // La hauteur dépend du nombre de colonnes qui tiennent dans la largeur disponible.
-  useEffect(() => {
-    const el = wrap.current;
-    const update = () => {
-      const cols = Math.max(1, Math.min(technologies.length, Math.floor(el.clientWidth / CELL)));
-      setHeight(Math.ceil(technologies.length / cols) * CELL);
-    };
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
   return (
     <Section id="tech" kicker="Ce que je maîtrise" title="Compétences.">
-      <div ref={wrap} className="balls">
-        <SafeCanvas style={{ height }} fallback={<BallsFallback labels={technologies} />}>
-          <Suspense fallback={null}>
-            <BallsCanvas labels={technologies} />
-          </Suspense>
-        </SafeCanvas>
+      <div className="balls">
+        {technologies.map((t, i) => (
+          <div className="ball" key={t} style={{ "--d": `${(i % 4) * -1.1}s` }}>
+            <div className="ball__body">
+              <span className="ball__label">{t}</span>
+            </div>
+          </div>
+        ))}
       </div>
       <ul className="skills">
         {skills.map((k) => (
