@@ -1,5 +1,4 @@
 import { Suspense, lazy, useState } from "react";
-import Section from "./Section.jsx";
 import SafeCanvas from "./SafeCanvas.jsx";
 import { profile } from "../data/constants.js";
 
@@ -21,9 +20,11 @@ export default function Contact() {
   };
 
   return (
-    <Section id="contact" kicker="Prenons contact" title="Contact." className="contact">
+    <section id="contact" className="section contact">
       <div className="contact__grid">
         <form className="contact__form" onSubmit={onSubmit}>
+          <p className="kicker">Prenons contact</p>
+          <h2 className="title">Contact.</h2>
           <label>
             Ton nom
             <input name="name" value={form.name} onChange={onChange} placeholder="Comment t'appelles-tu ?" required />
@@ -44,6 +45,6 @@ export default function Contact() {
           </Suspense>
         </SafeCanvas>
       </div>
-    </Section>
+    </section>
   );
 }

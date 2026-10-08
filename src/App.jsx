@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import Navbar from "./components/Navbar.jsx";
+import WaveBg from "./components/WaveBg.jsx";
 import Hero from "./components/Hero.jsx";
 import About from "./components/About.jsx";
 import Experience from "./components/Experience.jsx";
@@ -15,6 +16,7 @@ export default function App() {
     <div className="app">
       <Navbar />
       <div className="hero-bg">
+        <WaveBg />
         <Hero />
       </div>
       <About />

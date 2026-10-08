@@ -21,6 +21,7 @@ export const about =
 export const experiences = [
   {
     title: "Stage — Développeur",
+    icon: "briefcase",
     company: "Modafa",
     date: "Stage",
     color: "#383E56",
@@ -30,6 +31,7 @@ export const experiences = [
   },
   {
     title: "Projets d'école",
+    icon: "school",
     company: "Génie logiciel",
     date: "Parcours académique",
     color: "#E6DEDD",
@@ -41,6 +43,7 @@ export const experiences = [
   },
   {
     title: "TP Réseaux & systèmes",
+    icon: "network",
     company: "École",
     date: "Parcours académique",
     color: "#383E56",
@@ -52,6 +55,7 @@ export const experiences = [
   },
   {
     title: "Planification d'un projet de supervision",
+    icon: "chart",
     company: "Work package — Zabbix",
     date: "Parcours académique",
     color: "#E6DEDD",
@@ -63,6 +67,14 @@ export const experiences = [
 ];
 
 // Compétences : « \n » sépare les lignes affichées sur la boule.
+// Cartes de la section « À propos ».
+export const services = [
+  { icon: "web", title: "Développeur Web" },
+  { icon: "terminal", title: "Développeur C" },
+  { icon: "network", title: "Réseaux & Systèmes" },
+  { icon: "project", title: "Gestion de projet" },
+];
+
 export const technologies = [
   "Gestion\nde projet",
   "Dév.\nWeb",
@@ -84,6 +96,9 @@ export const skills = [
   "Administration système (notions)",
   "Administration réseau (notions)",
 ];
+
+export const projectsIntro =
+  "Ces projets illustrent mes compétences et mon expérience à travers des applications de gestion concrètes. Chacun est décrit brièvement, avec les technologies utilisées.";
 
 export const projects = [
   {

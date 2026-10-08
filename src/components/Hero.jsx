@@ -23,7 +23,12 @@ export default function Hero() {
         </div>
       </div>
 
-      <SafeCanvas className="hero__canvas" eager fallback={<div className="loader">La scène 3D nécessite WebGL.</div>}>
+      <SafeCanvas className="hero__canvas" eager fallback={(err) => (
+        <div className="loader">
+          <p>La scène 3D ne peut pas s'afficher sur cet appareil.</p>
+          <small>{err?.message}</small>
+        </div>
+      )}>
         <Suspense fallback={<div className="loader">Chargement…</div>}>
           <ComputersCanvas />
         </Suspense>

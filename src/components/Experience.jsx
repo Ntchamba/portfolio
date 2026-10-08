@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import Section from "./Section.jsx";
+import Icon from "./Icons.jsx";
 import { experiences } from "../data/constants.js";
 
 // « L'arbre » : un tronc central, des bourgeons (nœuds) et des branches (cartes) alternées.
 export default function Experience() {
   return (
-    <Section id="work" kicker="Ce que j'ai fait jusqu'ici" title="Expérience.">
+    <Section id="work" kicker="Ce que j'ai fait jusqu'ici" title="Parcours & expérience.">
       <ol className="tree">
         {experiences.map((exp, i) => {
           const side = i % 2 === 0 ? "left" : "right";
@@ -19,8 +20,8 @@ export default function Experience() {
               transition={{ duration: 0.6 }}
             >
               <span className="tree__date">{exp.date}</span>
-              <span className="tree__bud" style={{ background: exp.color }}>
-                {exp.company.charAt(0)}
+              <span className="tree__bud" style={{ background: exp.color, color: exp.color === "#E6DEDD" ? "#1d1836" : "#fff" }}>
+                <Icon name={exp.icon} size={26} />
               </span>
               <article className="tree__card">
                 <h3>{exp.title}</h3>

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import Section from "./Section.jsx";
 import Tilt from "./Tilt.jsx";
-import { projects } from "../data/constants.js";
+import { projects, projectsIntro } from "../data/constants.js";
 
 function GithubIcon() {
   return (
@@ -14,6 +14,7 @@ function GithubIcon() {
 export default function Projects() {
   return (
     <Section id="projects" kicker="Mon travail" title="Projets.">
+      <p className="lead">{projectsIntro}</p>
       <div className="cards">
         {projects.map((p, i) => (
           <motion.div
