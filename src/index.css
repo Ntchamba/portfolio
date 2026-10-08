@@ -79,9 +79,8 @@ ul, ol { list-style: none; }
 .tree__card li::before { content: "•"; position: absolute; left: 0; color: var(--violet); }
 
 /* Boules */
-.balls { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-top: 56px; }
-.balls__item { width: 150px; height: 150px; }
-.balls__item canvas { cursor: grab; }
+.balls { margin-top: 40px; }
+.balls canvas { cursor: pointer; }
 
 /* Projets */
 .cards { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 56px; justify-content: center; }

@@ -5,6 +5,7 @@ import About from "./components/About.jsx";
 import Experience from "./components/Experience.jsx";
 import Tech from "./components/Tech.jsx";
 import Projects from "./components/Projects.jsx";
+import SafeCanvas from "./components/SafeCanvas.jsx";
 import Contact from "./components/Contact.jsx";
 
 const StarsCanvas = lazy(() => import("./components/canvas/Stars.jsx"));
@@ -22,9 +23,11 @@ export default function App() {
       <Projects />
       <div className="contact-wrap">
         <Contact />
-        <Suspense fallback={null}>
-          <StarsCanvas />
-        </Suspense>
+        <SafeCanvas className="stars-layer">
+          <Suspense fallback={null}>
+            <StarsCanvas />
+          </Suspense>
+        </SafeCanvas>
       </div>
     </div>
   );

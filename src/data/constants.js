@@ -1,8 +1,8 @@
 // Tout le contenu éditable du portfolio est ici.
 export const profile = {
-  name: "Ton Nom",
-  role: "Développeur Full-Stack",
-  tagline: "Je conçois des interfaces web et des expériences 3D interactives.",
+  name: "Ntchamba Alan Ryan",
+  role: "Ingénieur polytechnicien, spécialisé en génie logiciel",
+  tagline: "Titulaire d'un Bac+3, je conçois des interfaces web et des expériences 3D interactives.",
   email: "ton.email@exemple.com",
 };
 
@@ -15,7 +15,7 @@ export const navLinks = [
 ];
 
 export const about =
-  "Développeur passionné par le web moderne et la 3D. J'aime transformer des idées en produits fluides, performants et soignés, de la conception à la mise en production. (Remplace ce texte par ta présentation.)";
+  "Ingénieur polytechnicien titulaire d'un Bac+3 et spécialisé en génie logiciel. Passionné par le web moderne et la 3D, j'aime transformer des idées en produits fluides, performants et soignés, de la conception à la mise en production.";
 
 // Chaque expérience devient une « branche » de l'arbre.
 export const experiences = [

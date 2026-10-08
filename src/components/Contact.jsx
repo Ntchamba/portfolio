@@ -1,5 +1,6 @@
 import { Suspense, lazy, useState } from "react";
 import Section from "./Section.jsx";
+import SafeCanvas from "./SafeCanvas.jsx";
 import { profile } from "../data/constants.js";
 
 const EarthCanvas = lazy(() => import("./canvas/Earth.jsx"));
@@ -37,11 +38,11 @@ export default function Contact() {
           </label>
           <button type="submit">{sent ? "Ouvert dans ta messagerie ✓" : "Envoyer"}</button>
         </form>
-        <div className="contact__earth">
+        <SafeCanvas className="contact__earth">
           <Suspense fallback={null}>
             <EarthCanvas />
           </Suspense>
-        </div>
+        </SafeCanvas>
       </div>
     </Section>
   );

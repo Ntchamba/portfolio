@@ -2,6 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, Float } from "@react-three/drei";
 import * as THREE from "three";
+import { profile } from "../../data/constants.js";
 
 // Dessine une fausse fenêtre « Visual Studio Code » sur un canvas 2D.
 function makeScreenTexture() {
@@ -52,7 +53,7 @@ function makeScreenTexture() {
     [["import", "#c586c0"], [" React ", "#9cdcfe"], ["from", "#c586c0"], [' "react"', "#ce9178"], [";", "#d4d4d4"]],
     [],
     [["const", "#569cd6"], [" developer", "#4fc1ff"], [" = {", "#d4d4d4"]],
-    [["  name", "#9cdcfe"], [": ", "#d4d4d4"], ['"Ton Nom"', "#ce9178"], [",", "#d4d4d4"]],
+    [["  name", "#9cdcfe"], [": ", "#d4d4d4"], [`"${profile.name}"`, "#ce9178"], [",", "#d4d4d4"]],
     [["  stack", "#9cdcfe"], [": [", "#d4d4d4"], ['"React"', "#ce9178"], [", ", "#d4d4d4"], ['"Three.js"', "#ce9178"], ["],", "#d4d4d4"]],
     [["  passion", "#9cdcfe"], [": ", "#d4d4d4"], ['"créer"', "#ce9178"], [",", "#d4d4d4"]],
     [["};", "#d4d4d4"]],

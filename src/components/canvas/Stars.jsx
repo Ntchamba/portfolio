@@ -38,10 +38,8 @@ function StarField() {
 
 export default function StarsCanvas() {
   return (
-    <div className="stars-layer">
-      <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 1.5]}>
-        <StarField />
-      </Canvas>
-    </div>
+    <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 1.5]}>
+      <StarField />
+    </Canvas>
   );
 }

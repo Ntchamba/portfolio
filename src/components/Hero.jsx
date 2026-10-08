@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
+import SafeCanvas from "./SafeCanvas.jsx";
 import { profile } from "../data/constants.js";
 
 const ComputersCanvas = lazy(() => import("./canvas/Computer.jsx"));
@@ -22,11 +23,11 @@ export default function Hero() {
         </div>
       </div>
 
-      <div className="hero__canvas">
+      <SafeCanvas className="hero__canvas" eager>
         <Suspense fallback={<div className="loader">Chargement…</div>}>
           <ComputersCanvas />
         </Suspense>
-      </div>
+      </SafeCanvas>
 
       <a href="#about" className="hero__scroll" aria-label="Défiler vers le bas">
         <span className="hero__mouse">
