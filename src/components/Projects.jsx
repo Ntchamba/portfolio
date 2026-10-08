@@ -30,9 +30,11 @@ export default function Projects() {
                   background: `radial-gradient(circle at 30% 20%, hsl(${p.hue} 90% 65% / .9), transparent 55%), linear-gradient(135deg, hsl(${p.hue} 60% 25%), #0d0820)`,
                 }}
               >
+                {p.repo && (
                 <a className="card__gh" href={p.repo} target="_blank" rel="noreferrer" aria-label={`Code source de ${p.name}`}>
                   <GithubIcon />
                 </a>
+                )}
               </div>
               <h3>{p.name}</h3>
               <p>{p.description}</p>

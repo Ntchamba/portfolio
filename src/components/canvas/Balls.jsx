@@ -11,10 +11,14 @@ function makeLabelTexture(label) {
   c.height = 512;
   const g = c.getContext("2d");
   g.fillStyle = "#2a1f4d";
-  g.font = "bold 84px Poppins, sans-serif";
   g.textAlign = "center";
   g.textBaseline = "middle";
-  g.fillText(label, 256, 256, 460);
+  const lines = label.split("\n");
+  const size = lines.length > 1 ? 96 : 150;
+  g.font = `bold ${size}px Poppins, sans-serif`;
+  lines.forEach((line, i) => {
+    g.fillText(line, 256, 256 + (i - (lines.length - 1) / 2) * size * 1.05, 440);
+  });
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.flipY = false;
@@ -54,8 +58,9 @@ function Ball({ label, position }) {
 
 function Grid({ labels }) {
   const width = useThree((s) => s.size.width);
-  const cols = Math.max(1, Math.min(labels.length, Math.floor(width / CELL)));
-  const rows = Math.ceil(labels.length / cols);
+  const maxCols = Math.max(1, Math.min(labels.length, Math.floor(width / CELL)));
+  const rows = Math.ceil(labels.length / maxCols);
+  const cols = Math.ceil(labels.length / rows); // lignes équilibrées
 
   return labels.map((label, i) => {
     const row = Math.floor(i / cols);

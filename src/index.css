@@ -43,13 +43,13 @@ ul, ol { list-style: none; }
 
 /* Hero */
 .hero { position: relative; height: 100vh; min-height: 640px; max-width: var(--max); margin: 0 auto; padding: 0 24px; }
-.hero__text { position: absolute; inset: 120px 24px auto; display: flex; gap: 20px; z-index: 2; pointer-events: none; }
+.hero__text { position: absolute; inset: 120px 24px auto; max-width: 560px; display: flex; gap: 20px; z-index: 2; pointer-events: none; }
 .hero__anchor { display: flex; flex-direction: column; align-items: center; margin-top: 8px; }
 .hero__circle { width: 20px; height: 20px; border-radius: 50%; background: var(--violet); }
 .hero__line { width: 4px; height: 280px; }
 .hero h1 { font-size: clamp(36px, 6vw, 68px); line-height: 1.1; font-weight: 800; }
 .hero p { margin-top: 12px; color: #dfd9ff; font-size: clamp(15px, 2vw, 22px); max-width: 560px; }
-.hero__canvas { position: absolute; inset: 0; }
+.hero__canvas { position: absolute; inset: 0 0 0 38%; }
 .loader { display: grid; place-items: center; height: 100%; color: var(--muted); }
 .hero__scroll { position: absolute; bottom: 28px; left: 0; right: 0; display: flex; justify-content: center; z-index: 2; }
 .hero__mouse { width: 35px; height: 64px; border-radius: 24px; border: 4px solid var(--muted); display: flex; justify-content: center; padding: 8px 0; }
@@ -81,6 +81,8 @@ ul, ol { list-style: none; }
 /* Boules */
 .balls { margin-top: 40px; }
 .balls canvas { cursor: pointer; }
+.skills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 8px; }
+.skills li { padding: 6px 14px; border-radius: 999px; background: rgba(145, 94, 255, .15); border: 1px solid rgba(145, 94, 255, .4); font-size: 14px; color: #ded9f2; }
 
 /* Projets */
 .cards { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 56px; justify-content: center; }
@@ -111,6 +113,8 @@ ul, ol { list-style: none; }
   .navbar__links.is-open { display: flex; }
   .hide-sm { display: none; }
   .hero__line { height: 160px; }
+  .hero__canvas { inset: 48% 0 0 0; }
+  .hero__text { max-width: none; }
   .tree::before { left: 24px; }
   .tree__item, .tree__item--right { width: 100%; margin-left: 0; padding: 0 0 48px 72px; }
   .tree__bud, .tree__item--right .tree__bud { left: -6px; right: auto; }

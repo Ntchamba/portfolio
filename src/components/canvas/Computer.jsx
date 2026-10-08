@@ -91,15 +91,15 @@ function Computer() {
   const screenTex = useMemo(makeScreenTexture, []);
   useEffect(() => () => screenTex.dispose(), [screenTex]);
 
-  const body = <meshStandardMaterial color="#1b1b2b" metalness={0.6} roughness={0.35} />;
+  const body = <meshStandardMaterial color="#4a4a6a" metalness={0.5} roughness={0.4} />;
 
   return (
     <Float speed={1.4} rotationIntensity={0.15} floatIntensity={0.4}>
-      <group position={[1.2, -1.1, 0]} scale={0.85}>
+      <group position={[0, -0.9, 0]}>
         {/* bureau */}
         <mesh position={[0, -1.35, 0.3]}>
           <boxGeometry args={[6.4, 0.14, 3]} />
-          <meshStandardMaterial color="#2a1f4d" metalness={0.3} roughness={0.5} />
+          <meshStandardMaterial color="#4b3a8f" metalness={0.3} roughness={0.5} />
         </mesh>
         {/* pied + socle */}
         <mesh position={[0, -1.05, -0.3]}>
@@ -137,12 +137,12 @@ function Computer() {
         {/* clavier */}
         <mesh position={[0, -1.25, 1.1]} rotation={[0.05, 0, 0]}>
           <boxGeometry args={[2.6, 0.08, 0.8]} />
-          <meshStandardMaterial color="#262640" metalness={0.5} roughness={0.5} />
+          <meshStandardMaterial color="#3a3a5c" metalness={0.5} roughness={0.5} />
         </mesh>
         {/* souris */}
         <mesh position={[1.9, -1.24, 1.1]}>
           <capsuleGeometry args={[0.1, 0.18, 4, 12]} />
-          <meshStandardMaterial color="#262640" metalness={0.5} roughness={0.4} />
+          <meshStandardMaterial color="#3a3a5c" metalness={0.5} roughness={0.4} />
         </mesh>
       </group>
     </Float>
@@ -155,10 +155,10 @@ export default function ComputersCanvas() {
       frameloop="always"
       dpr={[1, 2]}
       shadows={false}
-      camera={{ position: [6, 2.5, 13], fov: 30 }}
+      camera={{ position: [5, 2, 11], fov: 30 }}
       gl={{ antialias: true }}
     >
-      <ambientLight intensity={0.45} />
+      <ambientLight intensity={0.8} />
       <hemisphereLight intensity={0.6} groundColor="#1a0b3b" />
       <directionalLight position={[-6, 6, 4]} intensity={0.8} />
       {/* PointLight : crée le « glare » sur l'écran quand on pivote */}

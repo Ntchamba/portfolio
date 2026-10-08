@@ -15,7 +15,7 @@ export default function Hero() {
         </div>
         <div>
           <h1>
-            Salut, moi c'est <span className="accent">{profile.name}</span>
+            <span className="accent">{profile.name}</span>
           </h1>
           <p>
             {profile.role}.<br className="hide-sm" /> {profile.tagline}
@@ -23,7 +23,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <SafeCanvas className="hero__canvas" eager>
+      <SafeCanvas className="hero__canvas" eager fallback={<div className="loader">La scène 3D nécessite WebGL.</div>}>
         <Suspense fallback={<div className="loader">Chargement…</div>}>
           <ComputersCanvas />
         </Suspense>

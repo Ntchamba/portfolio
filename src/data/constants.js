@@ -2,14 +2,14 @@
 export const profile = {
   name: "Ntchamba Alan Ryan",
   role: "Ingénieur polytechnicien, spécialisé en génie logiciel",
-  tagline: "Titulaire d'un Bac+3, je conçois des interfaces web et des expériences 3D interactives.",
+  tagline: "Je conçois des applications de gestion et des interfaces web soignées.",
   email: "ton.email@exemple.com",
 };
 
 export const navLinks = [
   { id: "about", title: "À propos" },
   { id: "work", title: "Expérience" },
-  { id: "tech", title: "Technologies" },
+  { id: "tech", title: "Compétences" },
   { id: "projects", title: "Projets" },
   { id: "contact", title: "Contact" },
 ];
@@ -20,77 +20,92 @@ export const about =
 // Chaque expérience devient une « branche » de l'arbre.
 export const experiences = [
   {
-    title: "Développeur Front-End",
-    company: "Entreprise A",
-    date: "Mars 2023 – Aujourd'hui",
+    title: "Stage — Développeur",
+    company: "Modafa",
+    date: "Stage",
     color: "#383E56",
     points: [
-      "Développement d'interfaces React réutilisables et accessibles.",
-      "Collaboration avec les designers et les développeurs back-end.",
-      "Revues de code et amélioration des performances.",
+      "Participation au développement d'une application de gestion automatique d'une ferme.",
     ],
   },
   {
-    title: "Développeur Full-Stack",
-    company: "Entreprise B",
-    date: "Janv. 2022 – Fév. 2023",
+    title: "Projets d'école",
+    company: "Génie logiciel",
+    date: "Parcours académique",
     color: "#E6DEDD",
     points: [
-      "Conception d'API et d'applications web de bout en bout.",
-      "Mise en place de tests et de pipelines CI/CD.",
-      "Participation aux choix d'architecture.",
+      "Application de gestion des dépenses.",
+      "Application de gestion d'un établissement scolaire.",
+      "Application de gestion des tâches.",
     ],
   },
   {
-    title: "Développeur Web Junior",
-    company: "Entreprise C",
-    date: "Juin 2021 – Déc. 2021",
+    title: "TP Réseaux & systèmes",
+    company: "École",
+    date: "Parcours académique",
     color: "#383E56",
     points: [
-      "Intégration de maquettes responsive.",
-      "Correction de bugs et maintenance d'applications existantes.",
-      "Apprentissage des bonnes pratiques d'équipe.",
+      "Mise en place d'un réseau.",
+      "Supervision et surveillance du trafic avec Wireshark.",
+      "Configuration d'un nom de domaine sous Ubuntu Server, avec Apache et dnsmasq.",
+    ],
+  },
+  {
+    title: "Planification d'un projet de supervision",
+    company: "Work package — Zabbix",
+    date: "Parcours académique",
+    color: "#E6DEDD",
+    points: [
+      "Mise en place d'un work package et planification complète d'un projet de supervision d'équipements.",
+      "Supervision des équipements avec Zabbix.",
     ],
   },
 ];
 
-// Données de compétences volontairement génériques : à remplacer plus tard.
+// Compétences : « \n » sépare les lignes affichées sur la boule.
 export const technologies = [
-  "React", "JavaScript", "Node.js", "Three.js", "CSS", "Git",
+  "Gestion\nde projet",
+  "Dév.\nWeb",
+  "C",
+  "Python\nDjango",
+  "IA au\nquotidien",
+  "Réseau",
+  "Admin.\nsystème",
+  "Admin.\nréseau",
+];
+
+export const skills = [
+  "Gestion de projet",
+  "Développement web",
+  "Développement en C",
+  "Python avec Django",
+  "Intégration de l'IA dans les tâches quotidiennes",
+  "Réseau",
+  "Administration système (notions)",
+  "Administration réseau (notions)",
 ];
 
 export const projects = [
   {
-    name: "Projet Un",
-    description: "Courte description du projet, de sa stack et de son objectif.",
+    name: "Application de gestion de ferme",
+    description: "Application de gestion automatique d'une ferme, développée lors du stage chez Modafa.",
     tags: [
-      { name: "react", color: "blue-text-gradient" },
-      { name: "three.js", color: "green-text-gradient" },
-      { name: "css", color: "pink-text-gradient" },
+      { name: "gestion", color: "blue-text-gradient" },
+      { name: "automatisation", color: "green-text-gradient" },
+      { name: "stage", color: "pink-text-gradient" },
+    ],
+    hue: 140,
+    repo: null,
+  },
+  {
+    name: "Gestion d'école en C",
+    description: "Application de gestion d'un établissement scolaire développée en langage C.",
+    tags: [
+      { name: "c", color: "blue-text-gradient" },
+      { name: "gestion", color: "green-text-gradient" },
+      { name: "école", color: "pink-text-gradient" },
     ],
     hue: 265,
-    repo: "https://github.com/",
-  },
-  {
-    name: "Projet Deux",
-    description: "Courte description du projet, de sa stack et de son objectif.",
-    tags: [
-      { name: "node", color: "blue-text-gradient" },
-      { name: "api", color: "green-text-gradient" },
-      { name: "sql", color: "pink-text-gradient" },
-    ],
-    hue: 320,
-    repo: "https://github.com/",
-  },
-  {
-    name: "Projet Trois",
-    description: "Courte description du projet, de sa stack et de son objectif.",
-    tags: [
-      { name: "react", color: "blue-text-gradient" },
-      { name: "vite", color: "green-text-gradient" },
-      { name: "ui", color: "pink-text-gradient" },
-    ],
-    hue: 190,
-    repo: "https://github.com/",
+    repo: null,
   },
 ];

@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import Section from "./Section.jsx";
 import SafeCanvas from "./SafeCanvas.jsx";
-import { technologies } from "../data/constants.js";
+import { technologies, skills } from "../data/constants.js";
 
 const BallsCanvas = lazy(() => import("./canvas/Balls.jsx"));
 const CELL = 150;
@@ -24,7 +24,7 @@ export default function Tech() {
   }, []);
 
   return (
-    <Section id="tech" kicker="Mes outils" title="Technologies.">
+    <Section id="tech" kicker="Ce que je maîtrise" title="Compétences.">
       <div ref={wrap} className="balls">
         <SafeCanvas style={{ height }}>
           <Suspense fallback={null}>
@@ -32,6 +32,11 @@ export default function Tech() {
           </Suspense>
         </SafeCanvas>
       </div>
+      <ul className="skills">
+        {skills.map((k) => (
+          <li key={k}>{k}</li>
+        ))}
+      </ul>
     </Section>
   );
 }
