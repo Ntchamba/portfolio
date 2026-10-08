@@ -14,8 +14,8 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar ${scrolled ? "navbar--solid" : ""}`}>
-      <a href="#" className="navbar__logo" onClick={() => window.scrollTo(0, 0)}>
-        <span className="navbar__dot" /> {profile.name}
+      <a href="#" className="navbar__logo" aria-label={profile.name} title={profile.name} onClick={() => window.scrollTo(0, 0)}>
+        N
       </a>
       <button className="navbar__burger" aria-label="Menu" onClick={() => setOpen(!open)}>
         {open ? "✕" : "☰"}
