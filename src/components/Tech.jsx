@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import Section from "./Section.jsx";
+import { BallsFallback } from "./Fallbacks.jsx";
 import SafeCanvas from "./SafeCanvas.jsx";
 import { technologies, skills } from "../data/constants.js";
 
@@ -26,7 +27,7 @@ export default function Tech() {
   return (
     <Section id="tech" kicker="Ce que je maîtrise" title="Compétences.">
       <div ref={wrap} className="balls">
-        <SafeCanvas style={{ height }}>
+        <SafeCanvas style={{ height }} fallback={<BallsFallback labels={technologies} />}>
           <Suspense fallback={null}>
             <BallsCanvas labels={technologies} />
           </Suspense>

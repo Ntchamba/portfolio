@@ -1,4 +1,5 @@
 import { Suspense, lazy, useState } from "react";
+import { EarthFallback } from "./Fallbacks.jsx";
 import SafeCanvas from "./SafeCanvas.jsx";
 import { profile } from "../data/constants.js";
 
@@ -39,7 +40,7 @@ export default function Contact() {
           </label>
           <button type="submit">{sent ? "Ouvert dans ta messagerie ✓" : "Envoyer"}</button>
         </form>
-        <SafeCanvas className="contact__earth">
+        <SafeCanvas className="contact__earth" fallback={<EarthFallback />}>
           <Suspense fallback={null}>
             <EarthCanvas />
           </Suspense>

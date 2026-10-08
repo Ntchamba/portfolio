@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
+import { HeroFallback } from "./Fallbacks.jsx";
 import SafeCanvas from "./SafeCanvas.jsx";
 import { profile } from "../data/constants.js";
 
@@ -23,12 +24,7 @@ export default function Hero() {
         </div>
       </div>
 
-      <SafeCanvas className="hero__canvas" eager fallback={(err) => (
-        <div className="loader">
-          <p>La scène 3D ne peut pas s'afficher sur cet appareil.</p>
-          <small>{err?.message}</small>
-        </div>
-      )}>
+      <SafeCanvas className="hero__canvas" eager fallback={<HeroFallback />}>
         <Suspense fallback={<div className="loader">Chargement…</div>}>
           <ComputersCanvas />
         </Suspense>

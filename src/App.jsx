@@ -25,7 +25,7 @@ export default function App() {
       <Projects />
       <div className="contact-wrap">
         <Contact />
-        <SafeCanvas className="stars-layer">
+        <SafeCanvas className="stars-layer" fallback={<div className="fb-stars" />}>
           <Suspense fallback={null}>
             <StarsCanvas />
           </Suspense>
