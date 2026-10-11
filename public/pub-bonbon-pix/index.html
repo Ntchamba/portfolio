@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pub Bonbon Pix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #2a0b3d; font-family: Fredoka, system-ui, sans-serif; }
+  canvas { display: block; }
+  body.lecture { cursor: none; }
+  .calque { position: fixed; pointer-events: none; }
+  #logo { left: 50%; top: 42%; transform-origin: 50% 50%; text-align: center; white-space: nowrap; opacity: 0; }
+  #logo .w1, #logo .w2 { display: inline-block; }
+  #logo .w1 {
+    font-size: 15vh; font-weight: 700; letter-spacing: .02em;
+    color: #fff; -webkit-text-stroke: .9vh #ff2e7e; paint-order: stroke fill;
+    text-shadow: 0 1.4vh 0 #b0105a, 0 2.6vh 3vh rgba(0,0,0,.35);
+  }
+  #logo .w2 {
+    font-family: "Press Start 2P", monospace; font-size: 11vh; margin-left: 3vh;
+    background: linear-gradient(90deg, #ff3b5c 0 33%, #ffd23b 33% 66%, #4b9bff 66%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 .9vh 0 #fff) drop-shadow(0 1.6vh 1.5vh rgba(0,0,0,.4));
+  }
+  #slogan, #dispo { left: 50%; transform: translateX(-50%); white-space: nowrap; opacity: 0; color: #fff; text-align: center; }
+  #slogan { bottom: 17vh; font-size: 7vh; font-weight: 700; -webkit-text-stroke: .5vh #6b1fd1; paint-order: stroke fill; text-shadow: 0 .8vh 0 #3d0f80; }
+  #dispo { bottom: 9vh; font-size: 3.2vh; font-weight: 600; background: #ff2e7e; padding: .8vh 2.6vh; border-radius: 99px; box-shadow: 0 .6vh 0 #b0105a; }
+  #sous-titres {
+    left: 50%; bottom: 5vh; transform: translateX(-50%); max-width: 80vw; text-align: center;
+    font-size: 3.6vh; font-weight: 600; color: #fff; background: rgba(20, 4, 35, .6);
+    padding: .6vh 2vh; border-radius: 1vh; opacity: 0;
+  }
+  #accueil {
+    position: fixed; inset: 0; display: grid; place-items: center; text-align: center; color: #fff;
+    background: radial-gradient(circle at 50% 40%, #6b1fd1, #2a0b3d 70%);
+  }
+  #accueil h1 { font-size: clamp(36px, 8vw, 84px); margin: 0 0 8px; }
+  #accueil h1 span { font-family: "Press Start 2P", monospace; font-size: .7em; color: #ffd23b; }
+  #accueil button {
+    font: 700 24px Fredoka, sans-serif; color: #fff; background: #ff2e7e; border: 0; border-radius: 99px;
+    padding: 16px 40px; cursor: pointer; box-shadow: 0 6px 0 #b0105a;
+  }
+  #accueil button:active { transform: translateY(4px); box-shadow: 0 2px 0 #b0105a; }
+  #accueil p { opacity: .8; max-width: 560px; margin: 20px auto 0; line-height: 1.5; padding: 0 16px; }
+  kbd { background: rgba(255,255,255,.15); border-radius: 4px; padding: 1px 6px; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="logo" class="calque"><span class="w1">BONBON</span><span class="w2">PIX</span></div>
+<div id="slogan" class="calque">Croque la couleur !</div>
+<div id="dispo" class="calque">Disponible dès maintenant</div>
+<div id="sous-titres" class="calque"></div>
+<div id="accueil">
+  <div>
+    <h1>Bonbon <span>PIX</span></h1>
+    <button id="lancer">▶ Lancer la pub</button>
+    <p>Lance l'enregistrement de ton écran, puis clique sur le bouton.<br />
+      <kbd>F</kbd> plein écran · <kbd>S</kbd> sous-titres · <kbd>R</kbd> rejouer</p>
+  </div>
+</div>
+
+<script type="module">
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+
+const RENDU = new URLSearchParams(location.search).has("render");
+const T = await (await fetch("timeline.json")).json();
+await Promise.all([document.fonts.load("64px 'Press Start 2P'"), document.fonts.load("700 20px Fredoka")]).catch(() => {});
+
+// ---------- utilitaires de temps ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const lisse = (a, b, t) => { const x = clamp((t - a) / (b - a)); return x * x * (3 - 2 * x); };
+const fenetre = (a, b, t, f = 0.35) => lisse(a - f, a + f * 0.6, t) * (1 - lisse(b - f * 0.6, b + f, t));
+const rebond = (x) => { x = clamp(x); const c = 1.70158 * 1.5; return 1 + (c + 1) * (x - 1) ** 3 + c * (x - 1) ** 2; };
+const lerp = (a, b, x) => a + (b - a) * x;
+const hash = (n) => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
+const replique = (g) => T.repliques.find((r) => r.geste === g);
+const R = { coucou: replique("coucou"), bras: replique("bras"), montre: replique("montre"), croque: replique("croque"), final: replique("final") };
+const T_CROC = R.croque.debut + 0.55;
+const T_PACK = T.packshot;
+
+// ---------- rendu ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: RENDU });
+renderer.setPixelRatio(RENDU ? 1 : Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.body.prepend(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.55;
+
+function texDegrade() {
+  const c = document.createElement("canvas"); c.width = 16; c.height = 512;
+  const g = c.getContext("2d"), d = g.createLinearGradient(0, 0, 0, 512);
+  d.addColorStop(0, "#3a0f6e"); d.addColorStop(0.55, "#c2368f"); d.addColorStop(1, "#ff8fb1");
+  g.fillStyle = d; g.fillRect(0, 0, 16, 512);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+scene.background = texDegrade();
+scene.fog = new THREE.Fog(0xd04a96, 9, 22);
+
+const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.05, 100);
+
+scene.add(new THREE.HemisphereLight(0xffe6f4, 0x4a1a6b, 0.9));
+const soleil = new THREE.DirectionalLight(0xfff2e6, 2.6);
+soleil.position.set(2.5, 5, 4);
+soleil.castShadow = true;
+soleil.shadow.mapSize.set(2048, 2048);
+Object.assign(soleil.shadow.camera, { left: -4, right: 4, top: 4, bottom: -2, near: 1, far: 15 });
+soleil.shadow.bias = -0.0005;
+scene.add(soleil);
+const contreRose = new THREE.DirectionalLight(0xff4fa3, 2.2); contreRose.position.set(-4, 3, -3); scene.add(contreRose);
+const contreCyan = new THREE.DirectionalLight(0x5fd8ff, 1.8); contreCyan.position.set(4, 2.5, -3); scene.add(contreCyan);
+
+// sol + podium
+const sol = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshStandardMaterial({ color: 0xe25aa5, roughness: 0.6 }));
+sol.rotation.x = -Math.PI / 2; sol.position.y = -0.25; sol.receiveShadow = true; scene.add(sol);
+const podium = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.75, 0.25, 64), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.25, clearcoat: 1 }));
+podium.position.y = -0.125; podium.receiveShadow = true; scene.add(podium);
+const liseret = new THREE.Mesh(new THREE.TorusGeometry(2.66, 0.035, 12, 96), new THREE.MeshStandardMaterial({ color: 0xff2e7e, emissive: 0xff2e7e, emissiveIntensity: 0.8 }));
+liseret.rotation.x = Math.PI / 2; liseret.position.y = -0.02; scene.add(liseret);
+
+const PALETTE = [0xff3b5c, 0xffd23b, 0x4b9bff, 0x3bdc8a, 0xb36bff, 0xff8a3b, 0xffffff];
+
+// ---------- pluie de pixels-bonbons ----------
+function pluie(n, zMin, zMax, taille, graine) {
+  const geo = new THREE.BoxGeometry(taille, taille, taille);
+  const mat = new THREE.MeshPhysicalMaterial({ roughness: 0.3, clearcoat: 1 });
+  const m = new THREE.InstancedMesh(geo, mat, n);
+  const data = [];
+  for (let i = 0; i < n; i++) {
+    const h = (k) => hash(graine + i * 13.7 + k);
+    data.push({ x: (h(1) - 0.5) * 14, y0: h(2) * 9, z: lerp(zMin, zMax, h(3)), v: 0.35 + h(4) * 0.5, r: h(5) * 6, s: 0.6 + h(6) * 0.8 });
+    m.setColorAt(i, new THREE.Color(PALETTE[Math.floor(h(7) * PALETTE.length)]));
+  }
+  m.userData.data = data;
+  scene.add(m);
+  return m;
+}
+const pluieFond = pluie(140, -9, -2.5, 0.16, 1);
+const pluieAvant = pluie(60, 0.6, 2.8, 0.09, 99);
+const _o = new THREE.Object3D();
+function majPluie(m, t, visible) {
+  m.userData.data.forEach((d, i) => {
+    const y = ((d.y0 - t * d.v) % 9 + 9) % 9 - 1.2;
+    _o.position.set(d.x, y, d.z);
+    _o.rotation.set(d.r + t * 0.7, d.r * 2 + t * 0.9, 0);
+    _o.scale.setScalar(d.s * visible);
+    _o.updateMatrix();
+    m.setMatrixAt(i, _o.matrix);
+  });
+  m.instanceMatrix.needsUpdate = true;
+}
+
+// ---------- bonbon ----------
+function texBonbon() {
+  const c = document.createElement("canvas"); c.width = 512; c.height = 256;
+  const g = c.getContext("2d");
+  const p = 32;
+  for (let x = 0; x < 512; x += p) for (let y = 0; y < 256; y += p) {
+    g.fillStyle = hash(x * 0.37 + y * 1.91) < 0.35 ? "#ffffff" : "#dcdcdc";
+    g.fillRect(x, y, p, p);
+  }
+  g.font = "40px 'Press Start 2P', monospace";
+  g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
+  for (const u of [0.25, 0.75]) {
+    g.lineWidth = 10; g.strokeStyle = "#3a1050"; g.strokeText("PIX", 512 * u, 130);
+    g.fillStyle = "#fff"; g.fillText("PIX", 512 * u, 130);
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.magFilter = THREE.NearestFilter; return t;
+}
+let TEX_BONBON = null;
+function fabriqueBonbon(couleur) {
+  TEX_BONBON ??= texBonbon();
+  const g = new THREE.Group();
+  const corps = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), new THREE.MeshPhysicalMaterial({ color: couleur, map: TEX_BONBON, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.08 }));
+  corps.scale.set(1.25, 0.85, 0.85);
+  g.add(corps);
+  const matPapier = new THREE.MeshPhysicalMaterial({ color: couleur, roughness: 0.15, clearcoat: 1, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
+  for (const s of [-1, 1]) {
+    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.62, 0.75, 10, 1, true), matPapier);
+    cone.position.x = s * 1.55; cone.rotation.z = s * Math.PI / 2; g.add(cone);
+    const noeud = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.07, 10, 20), matPapier);
+    noeud.position.x = s * 1.18; noeud.rotation.y = Math.PI / 2; g.add(noeud);
+  }
+  g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  g.userData.materiaux = [corps.material, matPapier];
+  return g;
+}
+const SAVEURS = [new THREE.Color(0xff3b5c), new THREE.Color(0xffd23b), new THREE.Color(0x4b6bff)];
+function couleurBonbon(b, c) { b.userData.materiaux.forEach((m) => m.color.copy(c)); }
+
+// ---------- avatar ----------
+const M = {
+  peau: new THREE.MeshPhysicalMaterial({ color: 0xf2c29b, roughness: 0.55, sheen: 0.4, sheenColor: 0xff9a8a }),
+  sweat: new THREE.MeshStandardMaterial({ color: 0xff2e7e, roughness: 0.85 }),
+  sweatClair: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 }),
+  pantalon: new THREE.MeshStandardMaterial({ color: 0x2b2f6b, roughness: 0.8 }),
+  chaussure: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.4, clearcoat: 0.5 }),
+  semelle: new THREE.MeshStandardMaterial({ color: 0xffd23b, roughness: 0.6 }),
+  cheveux: new THREE.MeshPhysicalMaterial({ color: 0x3a2214, roughness: 0.45, sheen: 1, sheenColor: 0x8a5a3a }),
+  blanc: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, clearcoat: 1 }),
+  iris: new THREE.MeshPhysicalMaterial({ color: 0x5a3416, roughness: 0.2, clearcoat: 1 }),
+  pupille: new THREE.MeshStandardMaterial({ color: 0x0a0505, roughness: 0.2 }),
+  reflet: new THREE.MeshBasicMaterial({ color: 0xffffff }),
+  bouche: new THREE.MeshStandardMaterial({ color: 0x5c1427, roughness: 0.7 }),
+  dents: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 }),
+  langue: new THREE.MeshStandardMaterial({ color: 0xe0566e, roughness: 0.6 }),
+  joue: new THREE.MeshBasicMaterial({ color: 0xff6f8e, transparent: true, opacity: 0.35, depthWrite: false }),
+  sourcil: new THREE.MeshStandardMaterial({ color: 0x2a170d, roughness: 0.8 }),
+};
+const maille = (geo, mat, parent, x = 0, y = 0, z = 0) => {
+  const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
+};
+
+const avatar = new THREE.Group();
+scene.add(avatar);
+const corps = new THREE.Group(); avatar.add(corps);
+
+// jambes
+const jambes = [];
+for (const s of [-1, 1]) {
+  const hanche = new THREE.Group(); hanche.position.set(s * 0.13, 0.64, 0); corps.add(hanche);
+  maille(new THREE.CapsuleGeometry(0.115, 0.36, 8, 16), M.pantalon, hanche, 0, -0.3, 0);
+  const pied = maille(new THREE.SphereGeometry(1, 24, 16), M.chaussure, hanche, 0, -0.56, 0.05);
+  pied.scale.set(0.14, 0.085, 0.21);
+  const semelle = maille(new THREE.CylinderGeometry(1, 1, 1, 24), M.semelle, hanche, 0, -0.62, 0.05);
+  semelle.scale.set(0.14, 0.03, 0.21);
+  jambes.push(hanche);
+}
+// buste
+const buste = new THREE.Group(); buste.position.y = 0.62; corps.add(buste);
+const tronc = maille(new THREE.CapsuleGeometry(0.28, 0.36, 12, 24), M.sweat, buste, 0, 0.36, 0);
+tronc.scale.set(1.05, 1, 0.78);
+const ceinture = maille(new THREE.CylinderGeometry(0.29, 0.27, 0.1, 24), M.sweat, buste, 0, 0.06, 0); ceinture.scale.z = 0.8;
+const capuche = maille(new THREE.TorusGeometry(0.17, 0.075, 12, 24), M.sweat, buste, 0, 0.66, -0.03); capuche.rotation.x = Math.PI / 2 - 0.25;
+for (const s of [-1, 1]) {
+  const cordon = maille(new THREE.CylinderGeometry(0.012, 0.012, 0.18, 8), M.sweatClair, buste, s * 0.06, 0.52, 0.21);
+  cordon.rotation.x = -0.15;
+}
+{ // logo sur le sweat
+  const c = document.createElement("canvas"); c.width = c.height = 128;
+  const g = c.getContext("2d");
+  g.fillStyle = "#fff"; g.beginPath(); g.arc(64, 64, 62, 0, 7); g.fill();
+  g.font = "bold 34px 'Press Start 2P', monospace"; g.textAlign = "center"; g.textBaseline = "middle";
+  g.fillStyle = "#ff2e7e"; g.fillText("BP", 66, 68);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const patch = maille(new THREE.CircleGeometry(0.08, 32), new THREE.MeshStandardMaterial({ map: t, transparent: true, roughness: 0.7 }), buste, 0.1, 0.4, 0.222);
+  patch.rotation.y = 0.25; patch.castShadow = false;
+}
+
+// bras : épaule -> coude -> main
+function bras(s) {
+  const epaule = new THREE.Group(); epaule.position.set(s * 0.31, 0.56, 0); buste.add(epaule);
+  maille(new THREE.SphereGeometry(0.085, 16, 12), M.sweat, epaule);
+  maille(new THREE.CapsuleGeometry(0.07, 0.22, 8, 12), M.sweat, epaule, 0, -0.15, 0);
+  const coude = new THREE.Group(); coude.position.y = -0.3; epaule.add(coude);
+  maille(new THREE.CapsuleGeometry(0.065, 0.18, 8, 12), M.sweat, coude, 0, -0.11, 0);
+  const poignet = maille(new THREE.CylinderGeometry(0.068, 0.068, 0.04, 16), M.sweatClair, coude, 0, -0.23, 0);
+  poignet.castShadow = false;
+  const main = new THREE.Group(); main.position.y = -0.3; coude.add(main);
+  const paume = maille(new THREE.SphereGeometry(0.075, 16, 12), M.peau, main); paume.scale.set(1, 1.05, 0.75);
+  const pouce = maille(new THREE.CapsuleGeometry(0.024, 0.05, 4, 8), M.peau, main, s * -0.06, 0.01, 0.03); pouce.rotation.z = s * 0.6;
+  return { epaule, coude, main };
+}
+const brasD = bras(1);   // à droite de l'écran (tient le bonbon)
+const brasG = bras(-1);  // à gauche de l'écran (fait coucou)
+
+// tête
+const cou = maille(new THREE.CylinderGeometry(0.075, 0.085, 0.16, 16), M.peau, buste, 0, 0.7, 0);
+const tete = new THREE.Group(); tete.position.y = 0.74; buste.add(tete);
+const RT = 0.4;
+const crane = maille(new THREE.SphereGeometry(RT, 48, 32), M.peau, tete, 0, 0.36, 0);
+crane.scale.set(1, 0.97, 0.95);
+const visage = new THREE.Group(); visage.position.y = 0.36; tete.add(visage);
+const surface = (x, y, decal = 0) => Math.sqrt(Math.max(0, RT * RT - x * x - y * y)) * 0.95 + decal;
+
+for (const s of [-1, 1]) {
+  const oreille = maille(new THREE.SphereGeometry(0.1, 16, 12), M.peau, visage, s * 0.39, -0.02, -0.02);
+  oreille.scale.set(0.45, 1, 0.7);
+}
+// cheveux : calotte + mèches
+const calotte = maille(new THREE.SphereGeometry(RT * 1.06, 48, 24, 0, Math.PI * 2, 0, Math.PI * 0.42), M.cheveux, visage, 0, 0.0, -0.02);
+calotte.rotation.x = -0.42; calotte.scale.set(1, 1, 0.97);
+const arriere = maille(new THREE.SphereGeometry(RT * 1.04, 32, 16, 0, Math.PI * 2, Math.PI * 0.2, Math.PI * 0.42), M.cheveux, visage, 0, 0, -0.04);
+arriere.rotation.x = -1.2;
+for (let i = 0; i < 7; i++) {
+  const a = (i / 6 - 0.5) * 2.0;
+  const meche = maille(new THREE.ConeGeometry(0.075, 0.24, 12), M.cheveux, visage, Math.sin(a) * 0.31, 0.27 - Math.abs(a) * 0.03, Math.cos(a) * 0.29);
+  meche.rotation.set(1.95, 0, -a * 0.6 + (i % 2 ? 0.25 : -0.15));
+}
+const epi = maille(new THREE.ConeGeometry(0.06, 0.2, 10), M.cheveux, visage, 0.02, 0.43, -0.02); epi.rotation.set(-0.5, 0, -0.4);
+
+// yeux
+const yeux = [];
+for (const s of [-1, 1]) {
+  const x = s * 0.145, y = 0.02;
+  const oeil = new THREE.Group(); oeil.position.set(x, y, surface(x, y) - 0.035); visage.add(oeil);
+  const blanc = maille(new THREE.SphereGeometry(0.085, 24, 16), M.blanc, oeil); blanc.scale.set(0.9, 1.05, 0.6);
+  const iris = maille(new THREE.SphereGeometry(0.052, 20, 12), M.iris, oeil, 0, -0.005, 0.034); iris.scale.z = 0.5;
+  const pup = maille(new THREE.SphereGeometry(0.027, 16, 8), M.pupille, oeil, 0, -0.005, 0.052); pup.scale.z = 0.4;
+  maille(new THREE.SphereGeometry(0.012, 8, 6), M.reflet, oeil, -0.017, 0.018, 0.06);
+  const sourcil = maille(new THREE.CapsuleGeometry(0.017, 0.085, 4, 8), M.sourcil, visage, x, y + 0.13, surface(x, y + 0.13) + 0.005);
+  sourcil.rotation.z = Math.PI / 2 + s * 0.12;
+  yeux.push({ oeil, sourcil, y0: y + 0.13, s });
+}
+maille(new THREE.SphereGeometry(0.038, 16, 12), M.peau, visage, 0, -0.07, surface(0, -0.07) + 0.012);
+const joues = [-1, 1].map((s) => {
+  const j = maille(new THREE.CircleGeometry(0.06, 24), M.joue, visage, s * 0.24, -0.1, surface(s * 0.24, -0.1) + 0.012);
+  j.lookAt(new THREE.Vector3(s * 0.24, -0.1, 0).multiplyScalar(-1).add(j.position.clone().multiplyScalar(2)));
+  j.castShadow = false; return j;
+});
+
+// bouche : formes 2D reprojetées sur la sphère du visage à chaque image
+const Y_BOUCHE = -0.19;
+function formeBouche() {
+  const f = new THREE.Shape();
+  f.moveTo(-1, 0.25); f.quadraticCurveTo(0, -0.1, 1, 0.25); f.quadraticCurveTo(0, -2.0, -1, 0.25);
+  return f;
+}
+function formeDents() {
+  const f = new THREE.Shape();
+  f.moveTo(-0.92, 0.2); f.quadraticCurveTo(0, -0.12, 0.92, 0.2); f.quadraticCurveTo(0, -0.55, -0.92, 0.2);
+  return f;
+}
+function formeLangue() { const f = new THREE.Shape(); f.absellipse(0, -0.62, 0.48, 0.22, 0, Math.PI * 2); return f; }
+const partiesBouche = [
+  [formeBouche(), M.bouche, 0.004],
+  [formeLangue(), M.langue, 0.006],
+  [formeDents(), M.dents, 0.007],
+].map(([forme, mat, decal]) => {
+  const geo = new THREE.ShapeGeometry(forme, 16);
+  const m = new THREE.Mesh(geo, mat); visage.add(m);
+  return { m, base: Float32Array.from(geo.attributes.position.array), decal };
+});
+function majBouche(ouverture, largeur) {
+  for (const p of partiesBouche) {
+    const pos = p.m.geometry.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const x = p.base[i * 3] * 0.105 * largeur, y = Y_BOUCHE + p.base[i * 3 + 1] * 0.07 * ouverture;
+      pos.setXYZ(i, x, y, surface(x, y, p.decal));
+    }
+    pos.needsUpdate = true;
+    p.m.geometry.computeBoundingSphere();
+  }
+}
+
+avatar.traverse((o) => { if (o.isMesh && o.material !== M.joue) o.castShadow = true; });
+
+// bonbon tenu en main
+const bonbonMain = fabriqueBonbon(SAVEURS[0]);
+bonbonMain.scale.setScalar(0.11);
+bonbonMain.position.set(0, -0.11, 0.05);
+brasD.main.add(bonbonMain);
+
+// miettes
+const miettes = new THREE.InstancedMesh(new THREE.BoxGeometry(0.03, 0.03, 0.03), new THREE.MeshStandardMaterial({ color: 0x4b6bff, roughness: 0.3 }), 18);
+scene.add(miettes);
+
+// bonbon géant du packshot + étincelles
+const geant = fabriqueBonbon(SAVEURS[0]);
+scene.add(geant);
+const etincelles = new THREE.Group(); scene.add(etincelles);
+{
+  const c = document.createElement("canvas"); c.width = c.height = 64;
+  const g = c.getContext("2d"), d = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  d.addColorStop(0, "rgba(255,255,255,1)"); d.addColorStop(0.25, "rgba(255,240,200,.8)"); d.addColorStop(1, "rgba(255,255,255,0)");
+  g.fillStyle = d; g.fillRect(0, 0, 64, 64);
+  const tex = new THREE.CanvasTexture(c);
+  for (let i = 0; i < 24; i++) {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
+    s.userData = { a: hash(i) * 6.28, r: 0.9 + hash(i + 5) * 0.9, y: (hash(i + 9) - 0.5) * 1.6, p: hash(i + 3) * 6.28 };
+    etincelles.add(s);
+  }
+}
+
+// ---------- caméra ----------
+// [début, position, cible, durée du mouvement]
+const PLANS = [
+  [0.0, [0, 2.2, 10.5], [0, 1.3, 0], 0],
+  [0.3, [0, 1.55, 5.6], [0, 1.25, 0], 2.5],
+  [R.montre.debut - 0.3, [0.55, 1.6, 4.3], [0.15, 1.35, 0], 1.4],
+  [R.croque.debut - 0.2, [0.15, 1.72, 2.9], [0, 1.55, 0], 1.0],
+  [T_PACK - 0.3, [0.2, 1.45, 6.6], [0.2, 1.15, 0], 1.4],
+  [T_PACK + 1.2, [0.2, 1.38, 5.9], [0.2, 1.2, 0], T.duree - T_PACK - 1.2],
+];
+const vA = new THREE.Vector3(), vB = new THREE.Vector3(), cible = new THREE.Vector3();
+function majCamera(t) {
+  let i = 0;
+  while (i < PLANS.length - 1 && t >= PLANS[i + 1][0]) i++;
+  const [, p0, c0] = PLANS[Math.max(0, i - 1)], [t1, p1, c1, dur] = PLANS[i];
+  const x = dur ? lisse(t1, t1 + dur, t) : 1;
+  camera.position.copy(vA.fromArray(p0).lerp(vB.fromArray(p1), x));
+  cible.copy(vA.fromArray(c0).lerp(vB.fromArray(c1), x));
+  camera.position.x += Math.sin(t * 0.4) * 0.08;
+  camera.position.y += Math.sin(t * 0.55) * 0.03;
+  const portrait = camera.aspect < 1;
+  if (portrait) camera.position.sub(cible).multiplyScalar(1 / camera.aspect * 0.75).add(cible);
+  camera.lookAt(cible);
+}
+
+// ---------- animation de l'avatar ----------
+const POSES = {
+  repos:  { dSx: 0.05, dSz: 0.12, dEx: -0.25, gSx: 0.05, gSz: -0.12, gEx: -0.25 },
+  coucou: { gSx: -0.2, gSz: -2.55, gEx: -0.3 },
+  bras:   { dSx: -0.35, dSz: 1.15, dEx: -0.35, gSx: -0.35, gSz: -1.15, gEx: -0.35 },
+  montre: { dSx: -1.05, dSz: 0.55, dEx: -1.25 },
+  croque: { dSx: -1.25, dSz: -0.32, dEx: -1.95 },
+  final:  { dSx: -0.45, dSz: 1.25, dEx: -0.1, gSx: 0.05, gSz: -0.25, gEx: -1.2 },
+};
+function pose(t) {
+  const p = { ...POSES.repos };
+  const melange = (nom, w) => { for (const [k, v] of Object.entries(POSES[nom])) p[k] = lerp(p[k], v, w); };
+  melange("coucou", fenetre(R.coucou.debut, R.coucou.fin - 0.3, t));
+  melange("bras", fenetre(R.bras.debut, R.bras.fin, t));
+  melange("montre", fenetre(R.montre.debut, R.croque.debut + 0.2, t));
+  melange("croque", fenetre(R.croque.debut + 0.25, T_CROC + 0.35, t, 0.3));
+  melange("final", lisse(R.final.debut - 0.6, R.final.debut, t));
+  return p;
+}
+
+const _p = new THREE.Vector3();
+function majAvatar(t) {
+  const i = Math.min(T.bouche.length - 1, Math.max(0, Math.floor(t * T.fps)));
+  const parole = T.bouche[i] ?? 0;
+
+  // déplacement vers la gauche pour le packshot
+  const marche = lisse(T_PACK - 0.4, T_PACK + 0.9, t);
+  const enMarche = fenetre(T_PACK - 0.3, T_PACK + 0.8, t, 0.2);
+  avatar.position.x = lerp(0, -1.15, marche);
+  avatar.rotation.y = lerp(0, 0.35, marche) + Math.sin(t * 0.7) * 0.04;
+  jambes[0].rotation.x = Math.sin(t * 11) * 0.45 * enMarche;
+  jambes[1].rotation.x = -Math.sin(t * 11) * 0.45 * enMarche;
+
+  // respiration, balancement, petits sauts d'enthousiasme
+  const saut = Math.max(0, Math.sin((t - R.bras.debut) * 9)) * 0.05 * fenetre(R.bras.debut, R.bras.debut + 0.7, t, 0.15)
+             + Math.abs(Math.sin(t * 11)) * 0.03 * enMarche;
+  corps.position.y = saut;
+  buste.rotation.z = Math.sin(t * 1.3) * 0.025;
+  buste.rotation.x = Math.sin(t * 2.1) * 0.012 + parole * 0.02;
+  tronc.scale.y = 1 + Math.sin(t * 2.4) * 0.012;
+
+  const p = pose(t);
+  const vague = Math.sin(t * 10) * 0.45 * fenetre(R.coucou.debut, R.coucou.fin - 0.3, t);
+  brasD.epaule.rotation.set(p.dSx, 0, p.dSz);
+  brasD.coude.rotation.set(p.dEx, 0, 0);
+  brasG.epaule.rotation.set(p.gSx, 0, p.gSz);
+  brasG.coude.rotation.set(p.gEx, 0, vague);
+  brasD.main.rotation.set(0, 0, 0);
+
+  // tête : suit la parole, regarde le bonbon, le bonbon géant à la fin
+  const regardeBonbon = fenetre(R.montre.debut + 0.2, R.montre.debut + 1.9, t);
+  const regardeGeant = lisse(T_PACK + 0.6, T_PACK + 1.2, t) * (1 - lisse(R.final.debut + 0.2, R.final.debut + 0.7, t));
+  tete.rotation.y = 0.32 * regardeBonbon + 0.55 * regardeGeant + Math.sin(t * 0.9) * 0.05;
+  tete.rotation.x = Math.sin(t * 7.3) * 0.04 * parole - 0.12 * regardeBonbon;
+  tete.rotation.z = Math.sin(t * 1.7) * 0.05 + 0.08 * regardeGeant;
+
+  // bouche
+  const dansCroc = t > T_CROC - 0.15 && t < T_CROC + 0.1;
+  const mache = fenetre(T_CROC + 0.05, T_CROC + 1.2, t, 0.1);
+  let ouv = 0.32 + parole * 1.35;
+  if (dansCroc) ouv = 1.7;
+  ouv = lerp(ouv, 0.25 + Math.abs(Math.sin(t * 13)) * 0.5, mache * 0.5);
+  majBouche(ouv, 1 - parole * 0.12 + mache * 0.1);
+
+  // yeux : clignements + yeux plissés de plaisir en mâchant
+  const cligne = (t % 3.4) < 0.13 || ((t + 1.1) % 7.3) < 0.12;
+  const plaisir = fenetre(T_CROC + 0.1, T_CROC + 1.4, t, 0.15);
+  for (const y of yeux) {
+    y.oeil.scale.y = cligne ? 0.12 : lerp(1, 0.25, plaisir);
+    y.sourcil.position.y = y.y0 + parole * 0.015 + 0.03 * fenetre(R.coucou.debut, R.coucou.debut + 1, t) + 0.025 * plaisir;
+  }
+  for (const j of joues) { j.scale.setScalar(1 + plaisir * 0.4); j.material.opacity = 0.35 + plaisir * 0.3; }
+
+  // bonbon en main : apparaît, change de saveur, croqué
+  const apparait = rebond((t - R.montre.debut + 0.25) / 0.45);
+  const disparait = t >= T_CROC ? 0 : 1;
+  bonbonMain.scale.setScalar(0.11 * apparait * disparait);
+  bonbonMain.visible = apparait * disparait > 0.001;
+  const k = t < R.montre.debut + 0.62 ? 0 : t < R.montre.debut + 1.25 ? 1 : 2;
+  couleurBonbon(bonbonMain, SAVEURS[k]);
+  bonbonMain.rotation.set(0.2, t * 1.4 * (1 - fenetre(R.croque.debut, T_CROC + 0.5, t)), 0.25);
+
+  // miettes
+  if (t >= T_CROC && t < T_CROC + 1.6) {
+    visage.localToWorld(_p.set(0, Y_BOUCHE - 0.03, RT));
+    const dt = t - T_CROC;
+    for (let n = 0; n < miettes.count; n++) {
+      const a = hash(n * 3.1) * 6.28, v = 0.7 + hash(n * 7.7) * 1.1;
+      const y = Math.max(0.02, _p.y + (0.4 + hash(n) * 1.2) * dt - 4.9 * dt * dt);
+      _o.position.set(_p.x + Math.cos(a) * v * dt * 0.8, y, _p.z + 0.15 + Math.abs(Math.sin(a)) * v * dt * 0.7);
+      _o.rotation.set(dt * 9 + n, dt * 7, 0);
+      _o.scale.setScalar(1 - lisse(1.1, 1.6, dt));
+      _o.updateMatrix(); miettes.setMatrixAt(n, _o.matrix);
+    }
+    miettes.visible = true; miettes.instanceMatrix.needsUpdate = true;
+  } else miettes.visible = false;
+}
+
+function majPackshot(t) {
+  const e = rebond((t - T_PACK) / 0.9);
+  geant.visible = t > T_PACK - 0.1;
+  geant.position.set(lerp(5, 1.05, e), 1.25 + Math.sin(t * 2) * 0.06, 0.2);
+  geant.scale.setScalar(0.62);
+  geant.rotation.set(0.25 + Math.sin(t * 1.3) * 0.08, -0.3 + Math.sin(t * 0.9) * 0.35 + (1 - e) * 4, 0.12);
+  const k = Math.floor(Math.max(0, t - T_PACK) / 1.1) % 3;
+  const m = (Math.max(0, t - T_PACK) / 1.1) % 1;
+  couleurBonbon(geant, SAVEURS[k].clone().lerp(SAVEURS[(k + 1) % 3], lisse(0.75, 1, m)));
+  const vis = lisse(T_PACK + 0.6, T_PACK + 1.2, t);
+  etincelles.position.copy(geant.position);
+  etincelles.children.forEach((s) => {
+    const d = s.userData, a = d.a + t * 0.8;
+    s.position.set(Math.cos(a) * d.r * 1.15, d.y + Math.sin(t * 2 + d.p) * 0.08, Math.sin(a) * d.r * 0.6);
+    const sc = (0.08 + 0.1 * Math.max(0, Math.sin(t * 4 + d.p))) * vis;
+    s.scale.set(sc, sc, sc); s.visible = vis > 0;
+  });
+}
+
+// ---------- calques texte ----------
+const $ = (id) => document.getElementById(id);
+const logo = $("logo"), w1 = logo.querySelector(".w1"), w2 = logo.querySelector(".w2");
+let sousTitresActifs = true;
+function majTexte(t) {
+  const centre = [0.5, 0.42, 1], coin = [0.14, 0.09, 0.3], fin = [0.5, 0.17, 0.72];
+  const a = lisse(2.25, 2.9, t), b = lisse(T_PACK + 1.2, T_PACK + 1.9, t);
+  const etat = centre.map((v, i) => lerp(lerp(v, coin[i], a), fin[i], b));
+  const portrait = innerWidth < innerHeight;
+  const s = etat[2] * (portrait ? 0.55 : 1) * (1 + 0.04 * Math.sin(t * 3) * (1 - a + b));
+  logo.style.left = (portrait && a > 0.5 && b < 0.5 ? 0.22 : etat[0]) * 100 + "%";
+  logo.style.top = etat[1] * 100 + "%";
+  logo.style.transform = `translate(-50%,-50%) scale(${s})`;
+  logo.style.opacity = t < 0.5 ? 0 : 1;
+  w1.style.transform = `scale(${rebond((t - 0.5) / 0.5)})`;
+  w2.style.transform = `scale(${rebond((t - 1.3) / 0.5)}) rotate(${(1 - clamp((t - 1.3) / 0.5)) * -20}deg)`;
+
+  const sl = rebond((t - (R.final.debut + 1.0)) / 0.5);
+  $("slogan").style.opacity = clamp((t - R.final.debut - 1.0) * 4);
+  $("slogan").style.transform = `translateX(-50%) scale(${sl})`;
+  $("dispo").style.opacity = clamp((t - R.final.debut - 1.9) * 3);
+  $("dispo").style.transform = `translateX(-50%) translateY(${(1 - clamp((t - R.final.debut - 1.9) * 3)) * 2}vh)`;
+
+  const r = T.repliques.find((x) => t >= x.debut - 0.1 && t <= x.fin + 0.35 && x.geste !== "final");
+  const st = $("sous-titres");
+  st.style.opacity = r && sousTitresActifs ? 1 : 0;
+  if (r && st.textContent !== r.texte) st.textContent = r.texte;
+}
+
+// ---------- boucle ----------
+function image(t) {
+  t = clamp(t, 0, T.duree);
+  majCamera(t);
+  majAvatar(t);
+  majPackshot(t);
+  majPluie(pluieFond, t, 1);
+  majPluie(pluieAvant, t, lisse(T_PACK + 0.5, T_PACK + 1.5, t));
+  majTexte(t);
+  renderer.render(scene, camera);
+}
+
+function redimensionne() {
+  camera.aspect = innerWidth / innerHeight;
+  camera.fov = camera.aspect < 1 ? 50 : 35;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+}
+addEventListener("resize", redimensionne);
+redimensionne();
+
+if (RENDU) {
+  $("accueil").remove();
+  window.__duree = T.duree;
+  window.__image = (t) => image(t);
+  image(0);
+  window.__pret = true;
+} else {
+  const audio = new Audio("bande-son.mp3");
+  audio.preload = "auto";
+  let debut = null, enCours = false;
+  const temps = () => (audio.currentTime > 0 || !audio.paused ? audio.currentTime : (performance.now() - debut) / 1000);
+  function lancer() {
+    $("accueil").style.display = "none";
+    document.body.classList.add("lecture");
+    audio.currentTime = 0;
+    debut = performance.now();
+    audio.play().catch(() => {});
+    enCours = true;
+  }
+  $("lancer").onclick = lancer;
+  addEventListener("keydown", (e) => {
+    const k = e.key.toLowerCase();
+    if (k === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+    if (k === "s") sousTitresActifs = !sousTitresActifs;
+    if (k === "r") lancer();
+  });
+  renderer.setAnimationLoop(() => image(enCours ? temps() : 0));
+}
+</script>
+</body>
+</html>
