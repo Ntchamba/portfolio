@@ -6,46 +6,44 @@
 <title>Pub Bonbon Pix</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Press+Start+2P&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
 <style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #2a0b3d; font-family: Fredoka, system-ui, sans-serif; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #f3d6e4; font-family: Fredoka, system-ui, sans-serif; }
   canvas { display: block; }
   body.lecture { cursor: none; }
   .calque { position: fixed; pointer-events: none; }
-  #logo { left: 50%; top: 42%; transform-origin: 50% 50%; text-align: center; white-space: nowrap; opacity: 0; }
-  #logo .w1, #logo .w2 { display: inline-block; }
-  #logo .w1 {
-    font-size: 15vh; font-weight: 700; letter-spacing: .02em;
-    color: #fff; -webkit-text-stroke: .9vh #ff2e7e; paint-order: stroke fill;
-    text-shadow: 0 1.4vh 0 #b0105a, 0 2.6vh 3vh rgba(0,0,0,.35);
-  }
+  #logo { left: 50%; top: 42%; transform-origin: 50% 50%; white-space: nowrap; opacity: 0; }
+  #logo span { display: inline-block; font-weight: 700; font-size: 14vh; letter-spacing: -.01em; }
+  #logo .w1 { color: #fff; text-shadow: 0 .5vh 0 #e8b7cf, 0 1.5vh 4vh rgba(120, 20, 70, .35); }
   #logo .w2 {
-    font-family: "Press Start 2P", monospace; font-size: 11vh; margin-left: 3vh;
-    background: linear-gradient(90deg, #ff3b5c 0 33%, #ffd23b 33% 66%, #4b9bff 66%);
+    margin-left: 2.4vh;
+    background: linear-gradient(100deg, #ff3b6b 10%, #ffb627 45%, #3d7bff 85%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
-    filter: drop-shadow(0 .9vh 0 #fff) drop-shadow(0 1.6vh 1.5vh rgba(0,0,0,.4));
+    filter: drop-shadow(0 .5vh 0 #fff) drop-shadow(0 1.5vh 3vh rgba(120, 20, 70, .35));
   }
-  #slogan, #dispo { left: 50%; transform: translateX(-50%); white-space: nowrap; opacity: 0; color: #fff; text-align: center; }
-  #slogan { bottom: 17vh; font-size: 7vh; font-weight: 700; -webkit-text-stroke: .5vh #6b1fd1; paint-order: stroke fill; text-shadow: 0 .8vh 0 #3d0f80; }
-  #dispo { bottom: 9vh; font-size: 3.2vh; font-weight: 600; background: #ff2e7e; padding: .8vh 2.6vh; border-radius: 99px; box-shadow: 0 .6vh 0 #b0105a; }
+  #slogan, #dispo { left: 50%; transform: translateX(-50%); white-space: nowrap; opacity: 0; text-align: center; }
+  #slogan { bottom: 15vh; font-size: 6.4vh; font-weight: 700; color: #fff; text-shadow: 0 .4vh 0 #d14d8a, 0 1vh 3vh rgba(90, 10, 50, .4); }
+  #dispo {
+    bottom: 8vh; font-size: 2.8vh; font-weight: 600; color: #b3135e; background: rgba(255, 255, 255, .92);
+    padding: .9vh 2.8vh; border-radius: 99px; box-shadow: 0 1vh 3vh rgba(120, 20, 70, .25);
+  }
   #sous-titres {
     left: 50%; bottom: 5vh; transform: translateX(-50%); max-width: 80vw; text-align: center;
-    font-size: 3.6vh; font-weight: 600; color: #fff; background: rgba(20, 4, 35, .6);
-    padding: .6vh 2vh; border-radius: 1vh; opacity: 0;
+    font-size: 3.3vh; font-weight: 500; color: #fff; background: rgba(40, 8, 30, .55);
+    padding: .6vh 2vh; border-radius: 1vh; opacity: 0; backdrop-filter: blur(6px);
   }
   #accueil {
     position: fixed; inset: 0; display: grid; place-items: center; text-align: center; color: #fff;
-    background: radial-gradient(circle at 50% 40%, #6b1fd1, #2a0b3d 70%);
+    background: radial-gradient(circle at 50% 40%, #ff7eb3, #8a2a6b 75%);
   }
-  #accueil h1 { font-size: clamp(36px, 8vw, 84px); margin: 0 0 8px; }
-  #accueil h1 span { font-family: "Press Start 2P", monospace; font-size: .7em; color: #ffd23b; }
+  #accueil h1 { font-size: clamp(36px, 8vw, 84px); margin: 0 0 12px; }
   #accueil button {
-    font: 700 24px Fredoka, sans-serif; color: #fff; background: #ff2e7e; border: 0; border-radius: 99px;
-    padding: 16px 40px; cursor: pointer; box-shadow: 0 6px 0 #b0105a;
+    font: 600 22px Fredoka, sans-serif; color: #b3135e; background: #fff; border: 0; border-radius: 99px;
+    padding: 16px 40px; cursor: pointer; box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
   }
-  #accueil button:active { transform: translateY(4px); box-shadow: 0 2px 0 #b0105a; }
-  #accueil p { opacity: .8; max-width: 560px; margin: 20px auto 0; line-height: 1.5; padding: 0 16px; }
-  kbd { background: rgba(255,255,255,.15); border-radius: 4px; padding: 1px 6px; }
+  #accueil button:disabled { opacity: .6; cursor: progress; }
+  #accueil p { opacity: .85; max-width: 560px; margin: 20px auto 0; line-height: 1.5; padding: 0 16px; }
+  kbd { background: rgba(255, 255, 255, .2); border-radius: 4px; padding: 1px 6px; }
 </style>
 <script type="importmap">
 { "imports": {
@@ -55,14 +53,14 @@
 </script>
 </head>
 <body>
-<div id="logo" class="calque"><span class="w1">BONBON</span><span class="w2">PIX</span></div>
+<div id="logo" class="calque"><span class="w1">Bonbon</span><span class="w2">Pix</span></div>
 <div id="slogan" class="calque">Croque la couleur !</div>
 <div id="dispo" class="calque">Disponible dès maintenant</div>
 <div id="sous-titres" class="calque"></div>
 <div id="accueil">
   <div>
-    <h1>Bonbon <span>PIX</span></h1>
-    <button id="lancer">▶ Lancer la pub</button>
+    <h1>Bonbon Pix</h1>
+    <button id="lancer" disabled>Chargement…</button>
     <p>Lance l'enregistrement de ton écran, puis clique sur le bouton.<br />
       <kbd>F</kbd> plein écran · <kbd>S</kbd> sous-titres · <kbd>R</kbd> rejouer</p>
   </div>
@@ -70,334 +68,272 @@
 
 <script type="module">
 import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { BokehPass } from "three/addons/postprocessing/BokehPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 const RENDU = new URLSearchParams(location.search).has("render");
-const T = await (await fetch("timeline.json")).json();
-await Promise.all([document.fonts.load("64px 'Press Start 2P'"), document.fonts.load("700 20px Fredoka")]).catch(() => {});
+const [T, gltf] = await Promise.all([
+  fetch("timeline.json").then((r) => r.json()),
+  new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync("avatar.glb"),
+  document.fonts.load("700 20px Fredoka").catch(() => {}),
+]);
 
 // ---------- utilitaires de temps ----------
 const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const lisse = (a, b, t) => { const x = clamp((t - a) / (b - a)); return x * x * (3 - 2 * x); };
-const fenetre = (a, b, t, f = 0.35) => lisse(a - f, a + f * 0.6, t) * (1 - lisse(b - f * 0.6, b + f, t));
-const rebond = (x) => { x = clamp(x); const c = 1.70158 * 1.5; return 1 + (c + 1) * (x - 1) ** 3 + c * (x - 1) ** 2; };
+const fenetre = (a, b, t, f = 0.4) => lisse(a - f, a + f * 0.6, t) * (1 - lisse(b - f * 0.6, b + f, t));
+const rebond = (x) => { x = clamp(x); const c = 1.70158 * 1.3; return 1 + (c + 1) * (x - 1) ** 3 + c * (x - 1) ** 2; };
 const lerp = (a, b, x) => a + (b - a) * x;
 const hash = (n) => { const s = Math.sin(n * 127.1) * 43758.5453; return s - Math.floor(s); };
-const replique = (g) => T.repliques.find((r) => r.geste === g);
-const R = { coucou: replique("coucou"), bras: replique("bras"), montre: replique("montre"), croque: replique("croque"), final: replique("final") };
-const T_CROC = R.croque.debut + 0.55;
-const T_PACK = T.packshot;
+const R = Object.fromEntries(T.repliques.map((r) => [r.geste, r]));
+const T_CROC = T.croc, T_PACK = T.packshot;
+const _o = new THREE.Object3D();
 
 // ---------- rendu ----------
-const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: RENDU });
-renderer.setPixelRatio(RENDU ? 1 : Math.min(devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: RENDU });
+renderer.setPixelRatio(RENDU ? 1 : Math.min(devicePixelRatio, 1.5));
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 0.82;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.prepend(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
-scene.environmentIntensity = 0.55;
+scene.background = new THREE.Color(0x6a1f52);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.03).texture;
+scene.environmentIntensity = 0.45;
+const camera = new THREE.PerspectiveCamera(30, innerWidth / innerHeight, 0.05, 60);
 
-function texDegrade() {
-  const c = document.createElement("canvas"); c.width = 16; c.height = 512;
-  const g = c.getContext("2d"), d = g.createLinearGradient(0, 0, 0, 512);
-  d.addColorStop(0, "#3a0f6e"); d.addColorStop(0.55, "#c2368f"); d.addColorStop(1, "#ff8fb1");
-  g.fillStyle = d; g.fillRect(0, 0, 16, 512);
+// éclairage studio : clé douce, remplissage, deux contres colorés
+scene.add(new THREE.HemisphereLight(0xfff0f6, 0x6a2a4a, 0.35));
+const cle = new THREE.DirectionalLight(0xfff1e4, 2.4);
+cle.position.set(-2.2, 3.6, 3.4);
+cle.castShadow = true;
+cle.shadow.mapSize.set(2048, 2048);
+cle.shadow.bias = -0.0002;
+cle.shadow.normalBias = 0.02;
+Object.assign(cle.shadow.camera, { left: -2.5, right: 2.5, top: 3, bottom: -0.5, near: 0.5, far: 12 });
+scene.add(cle);
+const remplissage = new THREE.DirectionalLight(0xffe2ee, 0.8); remplissage.position.set(3, 1.6, 2.5); scene.add(remplissage);
+const contreRose = new THREE.SpotLight(0xff5fa8, 18, 8, 0.6, 0.8); contreRose.position.set(-1.6, 2.6, -1.8); contreRose.target.position.set(0, 1.4, 0); scene.add(contreRose, contreRose.target);
+const contreBleu = new THREE.SpotLight(0x7fb4ff, 12, 8, 0.6, 0.8); contreBleu.position.set(1.8, 2.4, -1.6); contreBleu.target.position.set(0, 1.4, 0); scene.add(contreBleu, contreBleu.target);
+
+// décor : fond courbe en dégradé + sol satiné
+function texDegrade(stops, h = 512) {
+  const c = document.createElement("canvas"); c.width = 4; c.height = h;
+  const g = c.getContext("2d"), d = g.createLinearGradient(0, 0, 0, h);
+  stops.forEach(([o, col]) => d.addColorStop(o, col));
+  g.fillStyle = d; g.fillRect(0, 0, c.width, c.height);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
 }
-scene.background = texDegrade();
-scene.fog = new THREE.Fog(0xd04a96, 9, 22);
-
-const camera = new THREE.PerspectiveCamera(35, innerWidth / innerHeight, 0.05, 100);
-
-scene.add(new THREE.HemisphereLight(0xffe6f4, 0x4a1a6b, 0.9));
-const soleil = new THREE.DirectionalLight(0xfff2e6, 2.6);
-soleil.position.set(2.5, 5, 4);
-soleil.castShadow = true;
-soleil.shadow.mapSize.set(2048, 2048);
-Object.assign(soleil.shadow.camera, { left: -4, right: 4, top: 4, bottom: -2, near: 1, far: 15 });
-soleil.shadow.bias = -0.0005;
-scene.add(soleil);
-const contreRose = new THREE.DirectionalLight(0xff4fa3, 2.2); contreRose.position.set(-4, 3, -3); scene.add(contreRose);
-const contreCyan = new THREE.DirectionalLight(0x5fd8ff, 1.8); contreCyan.position.set(4, 2.5, -3); scene.add(contreCyan);
-
-// sol + podium
-const sol = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.MeshStandardMaterial({ color: 0xe25aa5, roughness: 0.6 }));
-sol.rotation.x = -Math.PI / 2; sol.position.y = -0.25; sol.receiveShadow = true; scene.add(sol);
-const podium = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 2.75, 0.25, 64), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.25, clearcoat: 1 }));
-podium.position.y = -0.125; podium.receiveShadow = true; scene.add(podium);
-const liseret = new THREE.Mesh(new THREE.TorusGeometry(2.66, 0.035, 12, 96), new THREE.MeshStandardMaterial({ color: 0xff2e7e, emissive: 0xff2e7e, emissiveIntensity: 0.8 }));
-liseret.rotation.x = Math.PI / 2; liseret.position.y = -0.02; scene.add(liseret);
-
-const PALETTE = [0xff3b5c, 0xffd23b, 0x4b9bff, 0x3bdc8a, 0xb36bff, 0xff8a3b, 0xffffff];
-
-// ---------- pluie de pixels-bonbons ----------
-function pluie(n, zMin, zMax, taille, graine) {
-  const geo = new THREE.BoxGeometry(taille, taille, taille);
-  const mat = new THREE.MeshPhysicalMaterial({ roughness: 0.3, clearcoat: 1 });
-  const m = new THREE.InstancedMesh(geo, mat, n);
-  const data = [];
-  for (let i = 0; i < n; i++) {
-    const h = (k) => hash(graine + i * 13.7 + k);
-    data.push({ x: (h(1) - 0.5) * 14, y0: h(2) * 9, z: lerp(zMin, zMax, h(3)), v: 0.35 + h(4) * 0.5, r: h(5) * 6, s: 0.6 + h(6) * 0.8 });
-    m.setColorAt(i, new THREE.Color(PALETTE[Math.floor(h(7) * PALETTE.length)]));
-  }
-  m.userData.data = data;
-  scene.add(m);
-  return m;
+{
+  const fond = new THREE.Mesh(
+    new THREE.CylinderGeometry(9, 9, 10, 64, 1, true, -Math.PI * 0.75, Math.PI * 1.5),
+    new THREE.MeshStandardMaterial({ map: texDegrade([[0, "#5a1846"], [0.5, "#b23c7c"], [1, "#e886b4"]]), side: THREE.BackSide, roughness: 1 }),
+  );
+  fond.position.set(0, 4.2, 0); fond.rotation.y = Math.PI;
+  scene.add(fond);
+  const sol = new THREE.Mesh(new THREE.CircleGeometry(9, 64), new THREE.MeshStandardMaterial({ color: 0xc45a8e, roughness: 0.35 }));
+  sol.rotation.x = -Math.PI / 2; sol.receiveShadow = true; scene.add(sol);
 }
-const pluieFond = pluie(140, -9, -2.5, 0.16, 1);
-const pluieAvant = pluie(60, 0.6, 2.8, 0.09, 99);
-const _o = new THREE.Object3D();
-function majPluie(m, t, visible) {
-  m.userData.data.forEach((d, i) => {
-    const y = ((d.y0 - t * d.v) % 9 + 9) % 9 - 1.2;
-    _o.position.set(d.x, y, d.z);
-    _o.rotation.set(d.r + t * 0.7, d.r * 2 + t * 0.9, 0);
-    _o.scale.setScalar(d.s * visible);
-    _o.updateMatrix();
-    m.setMatrixAt(i, _o.matrix);
-  });
-  m.instanceMatrix.needsUpdate = true;
+// lumières floues en arrière-plan (bokeh)
+const bokeh = new THREE.Group(); scene.add(bokeh);
+const COULEURS = [0xff3b6b, 0xffb627, 0x3d7bff, 0x37d3a0, 0xb46bff, 0xffffff];
+for (let i = 0; i < 30; i++) {
+  const m = new THREE.Mesh(new THREE.SphereGeometry(0.05 + hash(i) * 0.07, 12, 8), new THREE.MeshBasicMaterial({ color: COULEURS[i % COULEURS.length] }));
+  m.material.color.multiplyScalar(1.1);
+  m.position.set((hash(i + 1) - 0.5) * 9, 0.5 + hash(i + 2) * 3.6, -3 - hash(i + 3) * 3);
+  m.userData.p = hash(i + 4) * 6.28;
+  m.userData.y0 = m.position.y;
+  bokeh.add(m);
 }
 
-// ---------- bonbon ----------
-function texBonbon() {
+// ---------- bonbons réalistes ----------
+function texSpirale(couleur) {
   const c = document.createElement("canvas"); c.width = 512; c.height = 256;
   const g = c.getContext("2d");
-  const p = 32;
-  for (let x = 0; x < 512; x += p) for (let y = 0; y < 256; y += p) {
-    g.fillStyle = hash(x * 0.37 + y * 1.91) < 0.35 ? "#ffffff" : "#dcdcdc";
-    g.fillRect(x, y, p, p);
+  g.fillStyle = "#fff"; g.fillRect(0, 0, 512, 256);
+  g.fillStyle = couleur;
+  for (let k = -4; k < 12; k++) {
+    g.beginPath();
+    g.moveTo(k * 64, 0); g.lineTo(k * 64 + 34, 0); g.lineTo(k * 64 + 34 + 128, 256); g.lineTo(k * 64 + 128, 256);
+    g.fill();
   }
-  g.font = "40px 'Press Start 2P', monospace";
-  g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
-  for (const u of [0.25, 0.75]) {
-    g.lineWidth = 10; g.strokeStyle = "#3a1050"; g.strokeText("PIX", 512 * u, 130);
-    g.fillStyle = "#fff"; g.fillText("PIX", 512 * u, 130);
-  }
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.magFilter = THREE.NearestFilter; return t;
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
 }
-let TEX_BONBON = null;
-function fabriqueBonbon(couleur) {
-  TEX_BONBON ??= texBonbon();
-  const g = new THREE.Group();
-  const corps = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 32), new THREE.MeshPhysicalMaterial({ color: couleur, map: TEX_BONBON, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.08 }));
-  corps.scale.set(1.25, 0.85, 0.85);
-  g.add(corps);
-  const matPapier = new THREE.MeshPhysicalMaterial({ color: couleur, roughness: 0.15, clearcoat: 1, side: THREE.DoubleSide, transparent: true, opacity: 0.85 });
-  for (const s of [-1, 1]) {
-    const cone = new THREE.Mesh(new THREE.ConeGeometry(0.62, 0.75, 10, 1, true), matPapier);
-    cone.position.x = s * 1.55; cone.rotation.z = s * Math.PI / 2; g.add(cone);
-    const noeud = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.07, 10, 20), matPapier);
-    noeud.position.x = s * 1.18; noeud.rotation.y = Math.PI / 2; g.add(noeud);
+const SAVEURS = ["#ff2d55", "#ffc21a", "#3a6dff"].map((c) => ({ tex: texSpirale(c) }));
+
+const geoCorps = new THREE.SphereGeometry(1, 48, 32);
+const geoPapier = (() => {
+  const pts = [];
+  for (let i = 0; i <= 20; i++) {
+    const x = i / 20;
+    pts.push(new THREE.Vector2(0.18 + Math.pow(x, 1.6) * 0.62 + Math.sin(x * 40) * 0.015 * x, x * 0.8));
   }
-  g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
-  g.userData.materiaux = [corps.material, matPapier];
+  const g = new THREE.LatheGeometry(pts, 28);
+  const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const y = p.getY(i), a = Math.atan2(p.getZ(i), p.getX(i));
+    const pli = 1 + Math.sin(a * 9) * 0.12 * (y / 0.8);
+    p.setX(i, p.getX(i) * pli); p.setZ(i, p.getZ(i) * pli);
+  }
+  g.computeVertexNormals();
+  return g;
+})();
+const matPapier = new THREE.MeshPhysicalMaterial({
+  color: 0xffffff, roughness: 0.08, transmission: 1, thickness: 0.02, ior: 1.4,
+  iridescence: 0.6, iridescenceIOR: 1.3, side: THREE.DoubleSide, transparent: true, opacity: 0.55,
+});
+function fabriqueBonbon(saveur) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshPhysicalMaterial({ map: saveur.tex, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.04 });
+  const corps = new THREE.Mesh(geoCorps, mat); corps.scale.set(1.3, 0.9, 0.9); corps.castShadow = true; g.add(corps);
+  const enveloppe = new THREE.Mesh(geoCorps, matPapier); enveloppe.scale.set(1.36, 0.96, 0.96); g.add(enveloppe);
+  for (const s of [-1, 1]) {
+    const p = new THREE.Mesh(geoPapier, matPapier);
+    p.position.x = s * 1.18; p.rotation.z = -s * Math.PI / 2; g.add(p);
+  }
+  g.userData.mat = mat;
   return g;
 }
-const SAVEURS = [new THREE.Color(0xff3b5c), new THREE.Color(0xffd23b), new THREE.Color(0x4b6bff)];
-function couleurBonbon(b, c) { b.userData.materiaux.forEach((m) => m.color.copy(c)); }
+function saveurBonbon(b, s) { b.userData.mat.map = s.tex; }
 
-// ---------- avatar ----------
-const M = {
-  peau: new THREE.MeshPhysicalMaterial({ color: 0xf2c29b, roughness: 0.55, sheen: 0.4, sheenColor: 0xff9a8a }),
-  sweat: new THREE.MeshStandardMaterial({ color: 0xff2e7e, roughness: 0.85 }),
-  sweatClair: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.8 }),
-  pantalon: new THREE.MeshStandardMaterial({ color: 0x2b2f6b, roughness: 0.8 }),
-  chaussure: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.4, clearcoat: 0.5 }),
-  semelle: new THREE.MeshStandardMaterial({ color: 0xffd23b, roughness: 0.6 }),
-  cheveux: new THREE.MeshPhysicalMaterial({ color: 0x3a2214, roughness: 0.45, sheen: 1, sheenColor: 0x8a5a3a }),
-  blanc: new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, clearcoat: 1 }),
-  iris: new THREE.MeshPhysicalMaterial({ color: 0x5a3416, roughness: 0.2, clearcoat: 1 }),
-  pupille: new THREE.MeshStandardMaterial({ color: 0x0a0505, roughness: 0.2 }),
-  reflet: new THREE.MeshBasicMaterial({ color: 0xffffff }),
-  bouche: new THREE.MeshStandardMaterial({ color: 0x5c1427, roughness: 0.7 }),
-  dents: new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.4 }),
-  langue: new THREE.MeshStandardMaterial({ color: 0xe0566e, roughness: 0.6 }),
-  joue: new THREE.MeshBasicMaterial({ color: 0xff6f8e, transparent: true, opacity: 0.35, depthWrite: false }),
-  sourcil: new THREE.MeshStandardMaterial({ color: 0x2a170d, roughness: 0.8 }),
-};
-const maille = (geo, mat, parent, x = 0, y = 0, z = 0) => {
-  const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; parent.add(m); return m;
-};
+// comptoir + bocal de bonbons
+{
+  const plateau = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.06, 0.62), new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.25, clearcoat: 0.6 }));
+  plateau.position.set(0, 0.93, 0.52); plateau.castShadow = plateau.receiveShadow = true; scene.add(plateau);
+  const facade = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.9, 0.56), new THREE.MeshStandardMaterial({ map: texDegrade([[0, "#ff7eb3"], [1, "#ff4f93"]], 256), roughness: 0.5 }));
+  facade.position.set(0, 0.45, 0.52); facade.castShadow = facade.receiveShadow = true; scene.add(facade);
+  const liseret = new THREE.Mesh(new THREE.BoxGeometry(2.62, 0.015, 0.64), new THREE.MeshStandardMaterial({ color: 0xffd36b, metalness: 0.9, roughness: 0.25 }));
+  liseret.position.set(0, 0.9, 0.52); scene.add(liseret);
 
-const avatar = new THREE.Group();
-scene.add(avatar);
-const corps = new THREE.Group(); avatar.add(corps);
-
-// jambes
-const jambes = [];
-for (const s of [-1, 1]) {
-  const hanche = new THREE.Group(); hanche.position.set(s * 0.13, 0.64, 0); corps.add(hanche);
-  maille(new THREE.CapsuleGeometry(0.115, 0.36, 8, 16), M.pantalon, hanche, 0, -0.3, 0);
-  const pied = maille(new THREE.SphereGeometry(1, 24, 16), M.chaussure, hanche, 0, -0.56, 0.05);
-  pied.scale.set(0.14, 0.085, 0.21);
-  const semelle = maille(new THREE.CylinderGeometry(1, 1, 1, 24), M.semelle, hanche, 0, -0.62, 0.05);
-  semelle.scale.set(0.14, 0.03, 0.21);
-  jambes.push(hanche);
-}
-// buste
-const buste = new THREE.Group(); buste.position.y = 0.62; corps.add(buste);
-const tronc = maille(new THREE.CapsuleGeometry(0.28, 0.36, 12, 24), M.sweat, buste, 0, 0.36, 0);
-tronc.scale.set(1.05, 1, 0.78);
-const ceinture = maille(new THREE.CylinderGeometry(0.29, 0.27, 0.1, 24), M.sweat, buste, 0, 0.06, 0); ceinture.scale.z = 0.8;
-const capuche = maille(new THREE.TorusGeometry(0.17, 0.075, 12, 24), M.sweat, buste, 0, 0.66, -0.03); capuche.rotation.x = Math.PI / 2 - 0.25;
-for (const s of [-1, 1]) {
-  const cordon = maille(new THREE.CylinderGeometry(0.012, 0.012, 0.18, 8), M.sweatClair, buste, s * 0.06, 0.52, 0.21);
-  cordon.rotation.x = -0.15;
-}
-{ // logo sur le sweat
-  const c = document.createElement("canvas"); c.width = c.height = 128;
-  const g = c.getContext("2d");
-  g.fillStyle = "#fff"; g.beginPath(); g.arc(64, 64, 62, 0, 7); g.fill();
-  g.font = "bold 34px 'Press Start 2P', monospace"; g.textAlign = "center"; g.textBaseline = "middle";
-  g.fillStyle = "#ff2e7e"; g.fillText("BP", 66, 68);
-  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
-  const patch = maille(new THREE.CircleGeometry(0.08, 32), new THREE.MeshStandardMaterial({ map: t, transparent: true, roughness: 0.7 }), buste, 0.1, 0.4, 0.222);
-  patch.rotation.y = 0.25; patch.castShadow = false;
-}
-
-// bras : épaule -> coude -> main
-function bras(s) {
-  const epaule = new THREE.Group(); epaule.position.set(s * 0.31, 0.56, 0); buste.add(epaule);
-  maille(new THREE.SphereGeometry(0.085, 16, 12), M.sweat, epaule);
-  maille(new THREE.CapsuleGeometry(0.07, 0.22, 8, 12), M.sweat, epaule, 0, -0.15, 0);
-  const coude = new THREE.Group(); coude.position.y = -0.3; epaule.add(coude);
-  maille(new THREE.CapsuleGeometry(0.065, 0.18, 8, 12), M.sweat, coude, 0, -0.11, 0);
-  const poignet = maille(new THREE.CylinderGeometry(0.068, 0.068, 0.04, 16), M.sweatClair, coude, 0, -0.23, 0);
-  poignet.castShadow = false;
-  const main = new THREE.Group(); main.position.y = -0.3; coude.add(main);
-  const paume = maille(new THREE.SphereGeometry(0.075, 16, 12), M.peau, main); paume.scale.set(1, 1.05, 0.75);
-  const pouce = maille(new THREE.CapsuleGeometry(0.024, 0.05, 4, 8), M.peau, main, s * -0.06, 0.01, 0.03); pouce.rotation.z = s * 0.6;
-  return { epaule, coude, main };
-}
-const brasD = bras(1);   // à droite de l'écran (tient le bonbon)
-const brasG = bras(-1);  // à gauche de l'écran (fait coucou)
-
-// tête
-const cou = maille(new THREE.CylinderGeometry(0.075, 0.085, 0.16, 16), M.peau, buste, 0, 0.7, 0);
-const tete = new THREE.Group(); tete.position.y = 0.74; buste.add(tete);
-const RT = 0.4;
-const crane = maille(new THREE.SphereGeometry(RT, 48, 32), M.peau, tete, 0, 0.36, 0);
-crane.scale.set(1, 0.97, 0.95);
-const visage = new THREE.Group(); visage.position.y = 0.36; tete.add(visage);
-const surface = (x, y, decal = 0) => Math.sqrt(Math.max(0, RT * RT - x * x - y * y)) * 0.95 + decal;
-
-for (const s of [-1, 1]) {
-  const oreille = maille(new THREE.SphereGeometry(0.1, 16, 12), M.peau, visage, s * 0.39, -0.02, -0.02);
-  oreille.scale.set(0.45, 1, 0.7);
-}
-// cheveux : calotte + mèches
-const calotte = maille(new THREE.SphereGeometry(RT * 1.06, 48, 24, 0, Math.PI * 2, 0, Math.PI * 0.42), M.cheveux, visage, 0, 0.0, -0.02);
-calotte.rotation.x = -0.42; calotte.scale.set(1, 1, 0.97);
-const arriere = maille(new THREE.SphereGeometry(RT * 1.04, 32, 16, 0, Math.PI * 2, Math.PI * 0.2, Math.PI * 0.42), M.cheveux, visage, 0, 0, -0.04);
-arriere.rotation.x = -1.2;
-for (let i = 0; i < 7; i++) {
-  const a = (i / 6 - 0.5) * 2.0;
-  const meche = maille(new THREE.ConeGeometry(0.075, 0.24, 12), M.cheveux, visage, Math.sin(a) * 0.31, 0.27 - Math.abs(a) * 0.03, Math.cos(a) * 0.29);
-  meche.rotation.set(1.95, 0, -a * 0.6 + (i % 2 ? 0.25 : -0.15));
-}
-const epi = maille(new THREE.ConeGeometry(0.06, 0.2, 10), M.cheveux, visage, 0.02, 0.43, -0.02); epi.rotation.set(-0.5, 0, -0.4);
-
-// yeux
-const yeux = [];
-for (const s of [-1, 1]) {
-  const x = s * 0.145, y = 0.02;
-  const oeil = new THREE.Group(); oeil.position.set(x, y, surface(x, y) - 0.035); visage.add(oeil);
-  const blanc = maille(new THREE.SphereGeometry(0.085, 24, 16), M.blanc, oeil); blanc.scale.set(0.9, 1.05, 0.6);
-  const iris = maille(new THREE.SphereGeometry(0.052, 20, 12), M.iris, oeil, 0, -0.005, 0.034); iris.scale.z = 0.5;
-  const pup = maille(new THREE.SphereGeometry(0.027, 16, 8), M.pupille, oeil, 0, -0.005, 0.052); pup.scale.z = 0.4;
-  maille(new THREE.SphereGeometry(0.012, 8, 6), M.reflet, oeil, -0.017, 0.018, 0.06);
-  const sourcil = maille(new THREE.CapsuleGeometry(0.017, 0.085, 4, 8), M.sourcil, visage, x, y + 0.13, surface(x, y + 0.13) + 0.005);
-  sourcil.rotation.z = Math.PI / 2 + s * 0.12;
-  yeux.push({ oeil, sourcil, y0: y + 0.13, s });
-}
-maille(new THREE.SphereGeometry(0.038, 16, 12), M.peau, visage, 0, -0.07, surface(0, -0.07) + 0.012);
-const joues = [-1, 1].map((s) => {
-  const j = maille(new THREE.CircleGeometry(0.06, 24), M.joue, visage, s * 0.24, -0.1, surface(s * 0.24, -0.1) + 0.012);
-  j.lookAt(new THREE.Vector3(s * 0.24, -0.1, 0).multiplyScalar(-1).add(j.position.clone().multiplyScalar(2)));
-  j.castShadow = false; return j;
-});
-
-// bouche : formes 2D reprojetées sur la sphère du visage à chaque image
-const Y_BOUCHE = -0.19;
-function formeBouche() {
-  const f = new THREE.Shape();
-  f.moveTo(-1, 0.25); f.quadraticCurveTo(0, -0.1, 1, 0.25); f.quadraticCurveTo(0, -2.0, -1, 0.25);
-  return f;
-}
-function formeDents() {
-  const f = new THREE.Shape();
-  f.moveTo(-0.92, 0.2); f.quadraticCurveTo(0, -0.12, 0.92, 0.2); f.quadraticCurveTo(0, -0.55, -0.92, 0.2);
-  return f;
-}
-function formeLangue() { const f = new THREE.Shape(); f.absellipse(0, -0.62, 0.48, 0.22, 0, Math.PI * 2); return f; }
-const partiesBouche = [
-  [formeBouche(), M.bouche, 0.004],
-  [formeLangue(), M.langue, 0.006],
-  [formeDents(), M.dents, 0.007],
-].map(([forme, mat, decal]) => {
-  const geo = new THREE.ShapeGeometry(forme, 16);
-  const m = new THREE.Mesh(geo, mat); visage.add(m);
-  return { m, base: Float32Array.from(geo.attributes.position.array), decal };
-});
-function majBouche(ouverture, largeur) {
-  for (const p of partiesBouche) {
-    const pos = p.m.geometry.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      const x = p.base[i * 3] * 0.105 * largeur, y = Y_BOUCHE + p.base[i * 3 + 1] * 0.07 * ouverture;
-      pos.setXYZ(i, x, y, surface(x, y, p.decal));
-    }
-    pos.needsUpdate = true;
-    p.m.geometry.computeBoundingSphere();
+  const profil = [];
+  for (let i = 0; i <= 16; i++) { const y = i / 16; profil.push(new THREE.Vector2(0.17 + Math.sin(y * Math.PI) * 0.05, y * 0.32)); }
+  const bocal = new THREE.Mesh(new THREE.LatheGeometry(profil, 40), new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 1, roughness: 0.03, thickness: 0.01, side: THREE.DoubleSide, transparent: true, opacity: 0.35 }));
+  bocal.position.set(-0.72, 0.96, 0.56); scene.add(bocal);
+  for (let i = 0; i < 26; i++) {
+    const b = fabriqueBonbon(SAVEURS[i % 3]);
+    const a = hash(i) * 6.28, r = hash(i + 2) * 0.13;
+    b.position.set(-0.72 + Math.cos(a) * r, 0.99 + Math.floor(i / 7) * 0.05 + hash(i + 7) * 0.02, 0.56 + Math.sin(a) * r);
+    b.rotation.set(hash(i + 3) * 6, hash(i + 4) * 6, hash(i + 5) * 6);
+    b.scale.setScalar(0.03);
+    scene.add(b);
+  }
+  for (let i = 0; i < 7; i++) {
+    const b = fabriqueBonbon(SAVEURS[(i + 1) % 3]);
+    b.position.set(0.35 + hash(i + 40) * 0.8, 0.985, 0.4 + hash(i + 41) * 0.3);
+    b.rotation.set(0, hash(i + 42) * 6, 0);
+    b.scale.setScalar(0.03);
+    scene.add(b);
   }
 }
 
-avatar.traverse((o) => { if (o.isMesh && o.material !== M.joue) o.castShadow = true; });
+// ---------- présentatrice ----------
+const avatar = gltf.scene;
+scene.add(avatar);
+const os = {};
+const morphs = [];
+avatar.traverse((o) => {
+  if (o.isBone) os[o.name] = o;
+  if (!o.isMesh) return;
+  o.castShadow = true; o.receiveShadow = true;
+  if (o.morphTargetDictionary) morphs.push(o);
+  const m = o.material;
+  if (m.name === "Human.body") {
+    o.material = new THREE.MeshPhysicalMaterial({ map: m.map, normalMap: m.normalMap, color: 0xffe6d6, roughness: 0.52, sheen: 0.35, sheenRoughness: 0.6, sheenColor: 0xffb3a0 });
+  }
+  if (m.name === "Human.female_casualsuit01") { m.map = null; m.color.set(0xffffff); m.roughness = 0.9; }
+  if (m.name === "Human.high-poly") {
+    // l'iris d'origine est brun-rouge : on le ramène vers un brun noisette naturel
+    m.roughness = 0.05;
+    m.onBeforeCompile = (s) => {
+      s.fragmentShader = s.fragmentShader.replace("#include <map_fragment>", `#include <map_fragment>
+        { vec3 c = diffuseColor.rgb; float l = dot(c, vec3(.3, .59, .11));
+          float sat = max(c.r, max(c.g, c.b)) - min(c.r, min(c.g, c.b));
+          diffuseColor.rgb = mix(c, l * vec3(1.25, 0.95, 0.62), smoothstep(0.08, 0.3, sat)); }`);
+    };
+  }
+  if (m.name === "Human.ponytail01") { m.roughness = 0.55; m.color.set(0x8a6a58); }
+});
+const repos = new Map(Object.values(os).map((b) => [b, b.quaternion.clone()]));
+const _q = new THREE.Quaternion(), _qp = new THREE.Quaternion(), _qr = new THREE.Quaternion();
+const AXES = { x: new THREE.Vector3(1, 0, 0), y: new THREE.Vector3(0, 1, 0), z: new THREE.Vector3(0, 0, 1) };
+// rotation d'un os autour d'un axe exprimé dans le repère du personnage
+function tourne(nom, axe, angle) {
+  const b = os[nom]; if (!b || !angle) return;
+  avatar.getWorldQuaternion(_qr).invert();
+  b.parent.getWorldQuaternion(_qp);
+  _qp.premultiply(_qr);
+  _q.setFromAxisAngle(AXES[axe], angle);
+  b.quaternion.premultiply(_qp.clone().invert().multiply(_q).multiply(_qp));
+  b.updateMatrixWorld(true);
+}
+function morph(nom, v) {
+  for (const m of morphs) { const i = m.morphTargetDictionary[nom]; if (i !== undefined) m.morphTargetInfluences[i] = v; }
+}
+function plieDoigts(cote, v, axe = "x") {
+  for (const d of ["Index", "Middle", "Ring", "Pinky"]) for (const k of [1, 2, 3]) {
+    const b = os[`${cote}Hand${d}${k}`]; if (b) b.quaternion.multiply(_q.setFromAxisAngle(AXES[axe], v * (k === 1 ? 0.9 : 1.1)));
+  }
+  const p = os[`${cote}HandThumb2`]; if (p) p.quaternion.multiply(_q.setFromAxisAngle(AXES[axe], v * 0.4));
+}
 
-// bonbon tenu en main
 const bonbonMain = fabriqueBonbon(SAVEURS[0]);
-bonbonMain.scale.setScalar(0.11);
-bonbonMain.position.set(0, -0.11, 0.05);
-brasD.main.add(bonbonMain);
-
-// miettes
-const miettes = new THREE.InstancedMesh(new THREE.BoxGeometry(0.03, 0.03, 0.03), new THREE.MeshStandardMaterial({ color: 0x4b6bff, roughness: 0.3 }), 18);
+scene.add(bonbonMain);
+const miettes = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.006, 0), new THREE.MeshPhysicalMaterial({ color: 0x3a6dff, roughness: 0.1, clearcoat: 1 }), 16);
 scene.add(miettes);
 
-// bonbon géant du packshot + étincelles
+// bonbon géant du packshot
 const geant = fabriqueBonbon(SAVEURS[0]);
 scene.add(geant);
 const etincelles = new THREE.Group(); scene.add(etincelles);
 {
   const c = document.createElement("canvas"); c.width = c.height = 64;
   const g = c.getContext("2d"), d = g.createRadialGradient(32, 32, 0, 32, 32, 32);
-  d.addColorStop(0, "rgba(255,255,255,1)"); d.addColorStop(0.25, "rgba(255,240,200,.8)"); d.addColorStop(1, "rgba(255,255,255,0)");
+  d.addColorStop(0, "rgba(255,255,255,1)"); d.addColorStop(0.2, "rgba(255,240,220,.8)"); d.addColorStop(1, "rgba(255,255,255,0)");
   g.fillStyle = d; g.fillRect(0, 0, 64, 64);
   const tex = new THREE.CanvasTexture(c);
-  for (let i = 0; i < 24; i++) {
+  for (let i = 0; i < 22; i++) {
     const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending }));
-    s.userData = { a: hash(i) * 6.28, r: 0.9 + hash(i + 5) * 0.9, y: (hash(i + 9) - 0.5) * 1.6, p: hash(i + 3) * 6.28 };
+    s.userData = { a: hash(i) * 6.28, r: 0.28 + hash(i + 5) * 0.2, y: (hash(i + 9) - 0.5) * 0.35, p: hash(i + 3) * 6.28 };
     etincelles.add(s);
   }
 }
+// pluie de bonbons au premier plan pendant le packshot
+const pluie = [];
+for (let i = 0; i < 14; i++) {
+  const b = fabriqueBonbon(SAVEURS[i % 3]);
+  b.scale.setScalar(0.035);
+  Object.assign(b.userData, { x: (hash(i + 60) - 0.5) * 2.2, z: 0.9 + hash(i + 61) * 0.9, v: 0.5 + hash(i + 62) * 0.4, d: hash(i + 63) * 1.4, r: hash(i + 64) * 6 });
+  scene.add(b); pluie.push(b);
+}
+
+// ---------- post-traitement : profondeur de champ + léger halo ----------
+const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(1, 1, { samples: 4, type: THREE.HalfFloatType }));
+composer.addPass(new RenderPass(scene, camera));
+const bokehPass = new BokehPass(scene, camera, { focus: 3, aperture: 0.0035, maxblur: 0.008 });
+composer.addPass(bokehPass);
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(256, 256), 0.18, 0.5, 1.0));
+composer.addPass(new OutputPass());
 
 // ---------- caméra ----------
 // [début, position, cible, durée du mouvement]
 const PLANS = [
-  [0.0, [0, 2.2, 10.5], [0, 1.3, 0], 0],
-  [0.3, [0, 1.55, 5.6], [0, 1.25, 0], 2.5],
-  [R.montre.debut - 0.3, [0.55, 1.6, 4.3], [0.15, 1.35, 0], 1.4],
-  [R.croque.debut - 0.2, [0.15, 1.72, 2.9], [0, 1.55, 0], 1.0],
-  [T_PACK - 0.3, [0.2, 1.45, 6.6], [0.2, 1.15, 0], 1.4],
-  [T_PACK + 1.2, [0.2, 1.38, 5.9], [0.2, 1.2, 0], T.duree - T_PACK - 1.2],
+  [0.0, [0, 1.55, 6.2], [0, 1.25, 0], 0],
+  [0.4, [0, 1.48, 2.9], [0, 1.36, 0], 2.4],
+  [R.montre.debut - 0.3, [0.28, 1.46, 2.25], [0.08, 1.38, 0], 1.4],
+  [R.croque.debut - 0.2, [0.05, 1.56, 1.25], [0.0, 1.5, 0], 1.0],
+  [T_PACK - 0.3, [0.32, 1.4, 3.5], [0.3, 1.28, 0], 1.4],
+  [T_PACK + 1.2, [0.32, 1.38, 3.15], [0.3, 1.3, 0], T.duree - T_PACK - 1.2],
 ];
-const vA = new THREE.Vector3(), vB = new THREE.Vector3(), cible = new THREE.Vector3();
+const vA = new THREE.Vector3(), vB = new THREE.Vector3(), cible = new THREE.Vector3(), _p = new THREE.Vector3();
 function majCamera(t) {
   let i = 0;
   while (i < PLANS.length - 1 && t >= PLANS[i + 1][0]) i++;
@@ -405,128 +341,151 @@ function majCamera(t) {
   const x = dur ? lisse(t1, t1 + dur, t) : 1;
   camera.position.copy(vA.fromArray(p0).lerp(vB.fromArray(p1), x));
   cible.copy(vA.fromArray(c0).lerp(vB.fromArray(c1), x));
-  camera.position.x += Math.sin(t * 0.4) * 0.08;
-  camera.position.y += Math.sin(t * 0.55) * 0.03;
-  const portrait = camera.aspect < 1;
-  if (portrait) camera.position.sub(cible).multiplyScalar(1 / camera.aspect * 0.75).add(cible);
+  camera.position.x += Math.sin(t * 0.45) * 0.03;
+  camera.position.y += Math.sin(t * 0.6) * 0.012;
+  if (camera.aspect < 1) camera.position.sub(cible).multiplyScalar(1.15 / camera.aspect * 0.6).add(cible);
   camera.lookAt(cible);
+  // mise au point sur le visage, puis entre le visage et le bonbon géant
+  os.Head.getWorldPosition(_p);
+  if (t > T_PACK) _p.lerp(geant.position, lisse(T_PACK + 0.3, T_PACK + 1.2, t) * 0.5);
+  bokehPass.uniforms.focus.value = camera.position.distanceTo(_p);
 }
 
-// ---------- animation de l'avatar ----------
+// ---------- animation ----------
+// angles (radians) autour des axes du personnage, appliqués du parent vers l'enfant
 const POSES = {
-  repos:  { dSx: 0.05, dSz: 0.12, dEx: -0.25, gSx: 0.05, gSz: -0.12, gEx: -0.25 },
-  coucou: { gSx: -0.2, gSz: -2.55, gEx: -0.3 },
-  bras:   { dSx: -0.35, dSz: 1.15, dEx: -0.35, gSx: -0.35, gSz: -1.15, gEx: -0.35 },
-  montre: { dSx: -1.05, dSz: 0.55, dEx: -1.25 },
-  croque: { dSx: -1.25, dSz: -0.32, dEx: -1.95 },
-  final:  { dSx: -0.45, dSz: 1.25, dEx: -0.1, gSx: 0.05, gSz: -0.25, gEx: -1.2 },
+  repos: { "LeftArm.z": -1.05, "RightArm.z": 1.05, "LeftArm.x": -0.08, "RightArm.x": -0.08, "LeftForeArm.x": -0.35, "RightForeArm.x": -0.35 },
+  coucou: { "RightArm.z": -1.5, "RightArm.x": -0.3, "RightForeArm.z": -1.0, "RightForeArm.x": 0.25 },
+  bras: { "LeftArm.z": 0.75, "RightArm.z": -0.75, "LeftArm.x": -0.75, "RightArm.x": -0.75, "LeftForeArm.x": -0.35, "RightForeArm.x": -0.35 },
+  montre: { "LeftArm.z": -0.85, "LeftArm.x": -0.45, "LeftForeArm.x": -1.7, "LeftForeArm.z": 0.35 },
+  croque: { "LeftArm.z": -0.45, "LeftArm.x": -1.05, "LeftArm.y": -0.75, "LeftForeArm.x": -1.9, "LeftForeArm.z": 1.65 },
+  final: { "LeftArm.z": 0.95, "LeftArm.x": -0.75, "LeftForeArm.x": -0.2, "RightArm.x": -0.2, "RightForeArm.x": -0.9, "RightForeArm.z": 0.3 },
 };
-function pose(t) {
-  const p = { ...POSES.repos };
-  const melange = (nom, w) => { for (const [k, v] of Object.entries(POSES[nom])) p[k] = lerp(p[k], v, w); };
-  melange("coucou", fenetre(R.coucou.debut, R.coucou.fin - 0.3, t));
-  melange("bras", fenetre(R.bras.debut, R.bras.fin, t));
-  melange("montre", fenetre(R.montre.debut, R.croque.debut + 0.2, t));
-  melange("croque", fenetre(R.croque.debut + 0.25, T_CROC + 0.35, t, 0.3));
-  melange("final", lisse(R.final.debut - 0.6, R.final.debut, t));
-  return p;
+const ORDRE = ["Spine", "Spine1", "Spine2", "Neck", "Head", "LeftArm", "LeftForeArm", "LeftHand", "RightArm", "RightForeArm", "RightHand"];
+function poids(t) {
+  return {
+    coucou: fenetre(R.coucou.debut - 0.2, R.coucou.fin - 0.2, t),
+    bras: fenetre(R.bras.debut, R.bras.fin, t),
+    montre: fenetre(R.montre.debut, R.croque.debut + 0.2, t),
+    croque: fenetre(R.croque.debut + 0.2, T_CROC + 0.4, t, 0.35),
+    final: lisse(T_PACK + 0.2, T_PACK + 0.9, t),
+  };
 }
 
-const _p = new THREE.Vector3();
-function majAvatar(t) {
-  const i = Math.min(T.bouche.length - 1, Math.max(0, Math.floor(t * T.fps)));
-  const parole = T.bouche[i] ?? 0;
-
-  // déplacement vers la gauche pour le packshot
-  const marche = lisse(T_PACK - 0.4, T_PACK + 0.9, t);
-  const enMarche = fenetre(T_PACK - 0.3, T_PACK + 0.8, t, 0.2);
-  avatar.position.x = lerp(0, -1.15, marche);
-  avatar.rotation.y = lerp(0, 0.35, marche) + Math.sin(t * 0.7) * 0.04;
-  jambes[0].rotation.x = Math.sin(t * 11) * 0.45 * enMarche;
-  jambes[1].rotation.x = -Math.sin(t * 11) * 0.45 * enMarche;
-
-  // respiration, balancement, petits sauts d'enthousiasme
-  const saut = Math.max(0, Math.sin((t - R.bras.debut) * 9)) * 0.05 * fenetre(R.bras.debut, R.bras.debut + 0.7, t, 0.15)
-             + Math.abs(Math.sin(t * 11)) * 0.03 * enMarche;
-  corps.position.y = saut;
-  buste.rotation.z = Math.sin(t * 1.3) * 0.025;
-  buste.rotation.x = Math.sin(t * 2.1) * 0.012 + parole * 0.02;
-  tronc.scale.y = 1 + Math.sin(t * 2.4) * 0.012;
-
-  const p = pose(t);
-  const vague = Math.sin(t * 10) * 0.45 * fenetre(R.coucou.debut, R.coucou.fin - 0.3, t);
-  brasD.epaule.rotation.set(p.dSx, 0, p.dSz);
-  brasD.coude.rotation.set(p.dEx, 0, 0);
-  brasG.epaule.rotation.set(p.gSx, 0, p.gSz);
-  brasG.coude.rotation.set(p.gEx, 0, vague);
-  brasD.main.rotation.set(0, 0, 0);
-
-  // tête : suit la parole, regarde le bonbon, le bonbon géant à la fin
-  const regardeBonbon = fenetre(R.montre.debut + 0.2, R.montre.debut + 1.9, t);
-  const regardeGeant = lisse(T_PACK + 0.6, T_PACK + 1.2, t) * (1 - lisse(R.final.debut + 0.2, R.final.debut + 0.7, t));
-  tete.rotation.y = 0.32 * regardeBonbon + 0.55 * regardeGeant + Math.sin(t * 0.9) * 0.05;
-  tete.rotation.x = Math.sin(t * 7.3) * 0.04 * parole - 0.12 * regardeBonbon;
-  tete.rotation.z = Math.sin(t * 1.7) * 0.05 + 0.08 * regardeGeant;
-
-  // bouche
-  const dansCroc = t > T_CROC - 0.15 && t < T_CROC + 0.1;
-  const mache = fenetre(T_CROC + 0.05, T_CROC + 1.2, t, 0.1);
-  let ouv = 0.32 + parole * 1.35;
-  if (dansCroc) ouv = 1.7;
-  ouv = lerp(ouv, 0.25 + Math.abs(Math.sin(t * 13)) * 0.5, mache * 0.5);
-  majBouche(ouv, 1 - parole * 0.12 + mache * 0.1);
-
-  // yeux : clignements + yeux plissés de plaisir en mâchant
-  const cligne = (t % 3.4) < 0.13 || ((t + 1.1) % 7.3) < 0.12;
-  const plaisir = fenetre(T_CROC + 0.1, T_CROC + 1.4, t, 0.15);
-  for (const y of yeux) {
-    y.oeil.scale.y = cligne ? 0.12 : lerp(1, 0.25, plaisir);
-    y.sourcil.position.y = y.y0 + parole * 0.015 + 0.03 * fenetre(R.coucou.debut, R.coucou.debut + 1, t) + 0.025 * plaisir;
+const VISEMES = { A: ["viseme_PP", 1], B: ["viseme_kk", 0.75], C: ["viseme_E", 0.85], D: ["viseme_aa", 0.9], E: ["viseme_O", 0.85], F: ["viseme_U", 0.85], G: ["viseme_FF", 0.9], H: ["viseme_nn", 0.8] };
+const NOMS_MORPH = [...new Set(morphs.flatMap((m) => Object.keys(m.morphTargetDictionary)))];
+function majVisage(t, voix) {
+  for (const n of NOMS_MORPH) morph(n, 0);
+  // formes de bouche (Rhubarb) avec fondu enchaîné
+  for (const r of T.repliques) {
+    if (t < r.debut - 0.1 || t > r.fin + 0.2) continue;
+    const f = r.formes;
+    for (let i = 0; i < f.length; i++) {
+      const [d, forme] = f[i], fin = f[i + 1]?.[0] ?? r.fin;
+      const w = lisse(d - 0.03, d + 0.05, t) * (1 - lisse(fin - 0.03, fin + 0.05, t));
+      const v = VISEMES[forme];
+      if (v && w > 0) morph(v[0], v[1] * w);
+    }
   }
-  for (const j of joues) { j.scale.setScalar(1 + plaisir * 0.4); j.material.opacity = 0.35 + plaisir * 0.3; }
+  const mache = fenetre(T_CROC + 0.1, T_CROC + 1.1, t, 0.12);
+  const plaisir = fenetre(T_CROC + 0.15, T_CROC + 1.3, t, 0.2);
+  const croc = fenetre(T_CROC - 0.3, T_CROC, t, 0.08);
+  morph("jawOpen", croc * 0.12 + mache * (0.08 + 0.12 * Math.max(0, Math.sin(t * 14))));
+  if (croc > 0) morph("viseme_O", croc * 0.7);
+  morph("mouthClose", mache * 0.3);
+  const sourire = 0.35 + 0.2 * fenetre(R.coucou.debut, R.coucou.fin, t) + 0.35 * plaisir + 0.25 * lisse(R.final.debut + 1.6, R.final.debut + 2.2, t);
+  morph("mouthSmileLeft", sourire); morph("mouthSmileRight", sourire);
+  morph("cheekSquintLeft", sourire * 0.5); morph("cheekSquintRight", sourire * 0.5);
+  morph("mouthDimpleLeft", sourire * 0.3); morph("mouthDimpleRight", sourire * 0.3);
+  const sourcils = 0.25 * voix + 0.5 * fenetre(R.coucou.debut + 0.9, R.coucou.fin, t, 0.25) + 0.3 * fenetre(R.bras.debut, R.bras.debut + 0.9, t, 0.2);
+  morph("browInnerUp", sourcils); morph("browOuterUpLeft", sourcils * 0.8); morph("browOuterUpRight", sourcils * 0.8);
+  // clignements
+  const c = t % 3.7, c2 = (t + 1.6) % 6.1;
+  const cligne = Math.max(1 - Math.abs(c - 0.08) / 0.08, 1 - Math.abs(c2 - 0.08) / 0.08, 0);
+  morph("eyeBlinkLeft", Math.max(cligne, plaisir * 0.75)); morph("eyeBlinkRight", Math.max(cligne, plaisir * 0.75));
+  morph("eyeSquintLeft", plaisir * 0.5 + sourire * 0.2); morph("eyeSquintRight", plaisir * 0.5 + sourire * 0.2);
+  // regard : vers le bonbon pendant qu'elle le montre, vers le bonbon géant au packshot
+  const regardBonbon = fenetre(R.montre.debut + 0.1, R.montre.debut + 1.6, t, 0.2);
+  const regardGeant = fenetre(T_PACK + 0.5, R.final.debut + 0.4, t, 0.25);
+  morph("eyeLookOutRight", regardBonbon * 0.5 + regardGeant * 0.7); morph("eyeLookInLeft", regardBonbon * 0.5 + regardGeant * 0.7);
+  morph("eyeLookDownLeft", regardBonbon * 0.25); morph("eyeLookDownRight", regardBonbon * 0.25);
+  return { regardBonbon, regardGeant };
+}
 
-  // bonbon en main : apparaît, change de saveur, croqué
-  const apparait = rebond((t - R.montre.debut + 0.25) / 0.45);
-  const disparait = t >= T_CROC ? 0 : 1;
-  bonbonMain.scale.setScalar(0.11 * apparait * disparait);
-  bonbonMain.visible = apparait * disparait > 0.001;
-  const k = t < R.montre.debut + 0.62 ? 0 : t < R.montre.debut + 1.25 ? 1 : 2;
-  couleurBonbon(bonbonMain, SAVEURS[k]);
-  bonbonMain.rotation.set(0.2, t * 1.4 * (1 - fenetre(R.croque.debut, T_CROC + 0.5, t)), 0.25);
+function majAvatar(t) {
+  const voix = T.voix[clamp(Math.floor(t * T.fps), 0, T.voix.length - 1)] ?? 0;
+  for (const [b, q] of repos) b.quaternion.copy(q);
+  avatar.rotation.y = Math.sin(t * 0.5) * 0.03 + 0.12 * lisse(T_PACK, T_PACK + 0.9, t);
+  avatar.updateMatrixWorld(true);
 
-  // miettes
-  if (t >= T_CROC && t < T_CROC + 1.6) {
-    visage.localToWorld(_p.set(0, Y_BOUCHE - 0.03, RT));
-    const dt = t - T_CROC;
+  const regard = majVisage(t, voix);
+  const w = poids(t);
+  const angles = { ...POSES.repos };
+  for (const [nom, p] of Object.entries(w)) for (const [k, v] of Object.entries(POSES[nom])) angles[k] = lerp(angles[k] ?? 0, v, p);
+  // vie : respiration, balancement, hochements pendant la parole
+  angles["Spine.z"] = Math.sin(t * 0.9) * 0.025;
+  angles["Spine1.x"] = Math.sin(t * 2.2) * 0.012;
+  angles["Spine2.y"] = -0.08 * w.montre + 0.06 * w.final;
+  angles["Neck.x"] = Math.sin(t * 6.3) * 0.035 * voix + 0.1 * regard.regardBonbon;
+  angles["Head.y"] = Math.sin(t * 0.8) * 0.05 + 0.12 * regard.regardBonbon + 0.3 * regard.regardGeant;
+  angles["Head.z"] = Math.sin(t * 1.3) * 0.04 - 0.06 * w.coucou + 0.05 * regard.regardGeant;
+  angles["Head.x"] = Math.sin(t * 4.1) * 0.03 * voix + 0.05 * regard.regardBonbon;
+  angles["RightForeArm.z"] = (angles["RightForeArm.z"] ?? 0) + Math.sin(t * 9) * 0.35 * w.coucou;
+  angles["LeftHand.x"] = -0.3 * w.montre - 0.4 * w.croque;
+  for (const nom of ORDRE) for (const axe of ["z", "x", "y"]) tourne(nom, axe, angles[`${nom}.${axe}`] ?? 0);
+  plieDoigts("Left", 0.55 * Math.max(w.montre, w.croque) + 0.15);
+  plieDoigts("Right", 0.15 + 0.1 * w.final);
+  avatar.updateMatrixWorld(true);
+
+  // bonbon en main
+  const tenu = t < T_CROC ? rebond((t - R.montre.debut + 0.3) / 0.45) : 0;
+  bonbonMain.visible = tenu > 0.001;
+  if (bonbonMain.visible) {
+    os.LeftHand.getWorldPosition(vA); os.LeftHandMiddle1.getWorldPosition(vB);
+    bonbonMain.position.copy(vA.lerp(vB, 0.7));
+    bonbonMain.position.z += 0.03;
+    bonbonMain.rotation.set(0.3, 0.6 + t * 1.2 * (1 - w.croque), 0.4);
+    bonbonMain.scale.setScalar(0.034 * tenu);
+    saveurBonbon(bonbonMain, SAVEURS[t < R.montre.debut + 0.75 ? 0 : t < R.montre.debut + 1.45 ? 1 : 2]);
+  }
+  // miettes du croc
+  const dt = t - T_CROC;
+  miettes.visible = dt > 0 && dt < 1.4;
+  if (miettes.visible) {
+    os.Head.getWorldPosition(vA); vA.y -= 0.075; vA.z += 0.09;
     for (let n = 0; n < miettes.count; n++) {
-      const a = hash(n * 3.1) * 6.28, v = 0.7 + hash(n * 7.7) * 1.1;
-      const y = Math.max(0.02, _p.y + (0.4 + hash(n) * 1.2) * dt - 4.9 * dt * dt);
-      _o.position.set(_p.x + Math.cos(a) * v * dt * 0.8, y, _p.z + 0.15 + Math.abs(Math.sin(a)) * v * dt * 0.7);
+      const a = hash(n * 3.1) * Math.PI, v = 0.25 + hash(n * 7.7) * 0.35;
+      _o.position.set(vA.x + Math.cos(a) * v * dt, Math.max(0.965, vA.y + (0.2 + hash(n) * 0.4) * dt - 4.9 * dt * dt), vA.z + 0.05 + Math.sin(a) * v * dt * 0.6);
       _o.rotation.set(dt * 9 + n, dt * 7, 0);
-      _o.scale.setScalar(1 - lisse(1.1, 1.6, dt));
+      _o.scale.setScalar(0.6 + hash(n + 9) * 0.8);
       _o.updateMatrix(); miettes.setMatrixAt(n, _o.matrix);
     }
-    miettes.visible = true; miettes.instanceMatrix.needsUpdate = true;
-  } else miettes.visible = false;
+    miettes.instanceMatrix.needsUpdate = true;
+  }
 }
 
-function majPackshot(t) {
-  const e = rebond((t - T_PACK) / 0.9);
-  geant.visible = t > T_PACK - 0.1;
-  geant.position.set(lerp(5, 1.05, e), 1.25 + Math.sin(t * 2) * 0.06, 0.2);
-  geant.scale.setScalar(0.62);
-  geant.rotation.set(0.25 + Math.sin(t * 1.3) * 0.08, -0.3 + Math.sin(t * 0.9) * 0.35 + (1 - e) * 4, 0.12);
-  const k = Math.floor(Math.max(0, t - T_PACK) / 1.1) % 3;
-  const m = (Math.max(0, t - T_PACK) / 1.1) % 1;
-  couleurBonbon(geant, SAVEURS[k].clone().lerp(SAVEURS[(k + 1) % 3], lisse(0.75, 1, m)));
+function majDecor(t) {
+  const e = rebond((t - T_PACK) / 1.0);
+  geant.visible = t > T_PACK;
+  geant.position.set(0.78, lerp(0.7, 1.32, e) + Math.sin(t * 1.8) * 0.015, 0.45);
+  geant.scale.setScalar(0.16 * clamp(e * 1.2));
+  geant.rotation.set(0.15 + Math.sin(t * 1.1) * 0.06, -0.35 + Math.sin(t * 0.8) * 0.3 + (1 - e) * 5, 0.1);
+  saveurBonbon(geant, SAVEURS[Math.floor(Math.max(0, t - T_PACK) / 1.4) % 3]);
   const vis = lisse(T_PACK + 0.6, T_PACK + 1.2, t);
   etincelles.position.copy(geant.position);
   etincelles.children.forEach((s) => {
-    const d = s.userData, a = d.a + t * 0.8;
-    s.position.set(Math.cos(a) * d.r * 1.15, d.y + Math.sin(t * 2 + d.p) * 0.08, Math.sin(a) * d.r * 0.6);
-    const sc = (0.08 + 0.1 * Math.max(0, Math.sin(t * 4 + d.p))) * vis;
+    const d = s.userData, a = d.a + t * 0.7;
+    s.position.set(Math.cos(a) * d.r, d.y + Math.sin(t * 2 + d.p) * 0.03, Math.sin(a) * d.r * 0.5);
+    const sc = (0.03 + 0.045 * Math.max(0, Math.sin(t * 4 + d.p))) * vis;
     s.scale.set(sc, sc, sc); s.visible = vis > 0;
   });
+  for (const b of pluie) {
+    const d = b.userData, tt = t - T_PACK - 0.4 - d.d;
+    b.visible = tt > 0;
+    b.position.set(d.x, 2.6 - tt * d.v * 1.6, d.z);
+    b.rotation.set(d.r + tt * 1.5, d.r * 2 + tt, 0);
+  }
+  bokeh.children.forEach((m) => { m.position.y = m.userData.y0 + Math.sin(t * 0.5 + m.userData.p) * 0.08; });
 }
 
 // ---------- calques texte ----------
@@ -534,23 +493,24 @@ const $ = (id) => document.getElementById(id);
 const logo = $("logo"), w1 = logo.querySelector(".w1"), w2 = logo.querySelector(".w2");
 let sousTitresActifs = true;
 function majTexte(t) {
-  const centre = [0.5, 0.42, 1], coin = [0.14, 0.09, 0.3], fin = [0.5, 0.17, 0.72];
-  const a = lisse(2.25, 2.9, t), b = lisse(T_PACK + 1.2, T_PACK + 1.9, t);
+  const centre = [0.5, 0.4, 1], coin = [0.12, 0.08, 0.32], fin = [0.5, 0.15, 0.7];
+  const a = lisse(2.2, 2.8, t), b = lisse(T_PACK + 1.3, T_PACK + 2.0, t);
   const etat = centre.map((v, i) => lerp(lerp(v, coin[i], a), fin[i], b));
   const portrait = innerWidth < innerHeight;
-  const s = etat[2] * (portrait ? 0.55 : 1) * (1 + 0.04 * Math.sin(t * 3) * (1 - a + b));
   logo.style.left = (portrait && a > 0.5 && b < 0.5 ? 0.22 : etat[0]) * 100 + "%";
   logo.style.top = etat[1] * 100 + "%";
-  logo.style.transform = `translate(-50%,-50%) scale(${s})`;
-  logo.style.opacity = t < 0.5 ? 0 : 1;
-  w1.style.transform = `scale(${rebond((t - 0.5) / 0.5)})`;
-  w2.style.transform = `scale(${rebond((t - 1.3) / 0.5)}) rotate(${(1 - clamp((t - 1.3) / 0.5)) * -20}deg)`;
+  logo.style.transform = `translate(-50%,-50%) scale(${etat[2] * (portrait ? 0.55 : 1)})`;
+  logo.style.opacity = clamp((t - 0.45) * 6);
+  w1.style.transform = `translateY(${(1 - rebond((t - 0.45) / 0.55)) * 4}vh) scale(${lerp(0.6, 1, rebond((t - 0.45) / 0.55))})`;
+  w1.style.opacity = clamp((t - 0.45) * 5);
+  w2.style.transform = `scale(${rebond((t - 1.2) / 0.5)})`;
+  w2.style.opacity = clamp((t - 1.2) * 5);
 
-  const sl = rebond((t - (R.final.debut + 1.0)) / 0.5);
-  $("slogan").style.opacity = clamp((t - R.final.debut - 1.0) * 4);
-  $("slogan").style.transform = `translateX(-50%) scale(${sl})`;
-  $("dispo").style.opacity = clamp((t - R.final.debut - 1.9) * 3);
-  $("dispo").style.transform = `translateX(-50%) translateY(${(1 - clamp((t - R.final.debut - 1.9) * 3)) * 2}vh)`;
+  const ts = R.final.debut + 1.1;
+  $("slogan").style.opacity = clamp((t - ts) * 4);
+  $("slogan").style.transform = `translateX(-50%) scale(${lerp(0.8, 1, rebond((t - ts) / 0.5))})`;
+  $("dispo").style.opacity = clamp((t - ts - 0.8) * 3);
+  $("dispo").style.transform = `translateX(-50%) translateY(${(1 - clamp((t - ts - 0.8) * 3)) * 2}vh)`;
 
   const r = T.repliques.find((x) => t >= x.debut - 0.1 && t <= x.fin + 0.35 && x.geste !== "final");
   const st = $("sous-titres");
@@ -561,20 +521,18 @@ function majTexte(t) {
 // ---------- boucle ----------
 function image(t) {
   t = clamp(t, 0, T.duree);
-  majCamera(t);
   majAvatar(t);
-  majPackshot(t);
-  majPluie(pluieFond, t, 1);
-  majPluie(pluieAvant, t, lisse(T_PACK + 0.5, T_PACK + 1.5, t));
+  majDecor(t);
+  majCamera(t);
   majTexte(t);
-  renderer.render(scene, camera);
+  composer.render();
 }
-
 function redimensionne() {
   camera.aspect = innerWidth / innerHeight;
-  camera.fov = camera.aspect < 1 ? 50 : 35;
+  camera.fov = camera.aspect < 1 ? 45 : 30;
   camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
 }
 addEventListener("resize", redimensionne);
 redimensionne();
@@ -598,6 +556,8 @@ if (RENDU) {
     audio.play().catch(() => {});
     enCours = true;
   }
+  $("lancer").disabled = false;
+  $("lancer").textContent = "▶ Lancer la pub";
   $("lancer").onclick = lancer;
   addEventListener("keydown", (e) => {
     const k = e.key.toLowerCase();
