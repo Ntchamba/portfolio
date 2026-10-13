@@ -46,7 +46,7 @@ const duree = await page.evaluate("window.__duree");
 if (test) {
   for (const t of test.split(",").map(Number)) {
     await page.evaluate((t) => window.__image(t), t);
-    await page.screenshot({ path: sortie.replace(/\.mp4$/, "") + `-${t}.png` });
+    await page.screenshot({ path: sortie.replace(/\.mp4$/, "") + `-${t}.png`, timeout: 0 });
     console.log("image", t);
   }
 } else {
@@ -59,7 +59,7 @@ if (test) {
   const n = Math.round(duree * fps);
   for (let i = 0; i < n; i++) {
     await page.evaluate((t) => window.__image(t), i / fps);
-    const png = await page.screenshot({ type: "jpeg", quality: 95 });
+    const png = await page.screenshot({ type: "jpeg", quality: 95, timeout: 0 });
     if (!ffmpeg.stdin.write(png)) await new Promise((r) => ffmpeg.stdin.once("drain", r));
     if (i % fps === 0) process.stdout.write(`\r${Math.round((i / n) * 100)} %`);
   }
